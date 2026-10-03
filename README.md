@@ -66,9 +66,11 @@ when applying a batch.
    This CLI uses it to reach Vivaldi's own browser interface and its native tab APIs.
    A website's JavaScript context cannot manage Vivaldi stacks.
 
-   Open `vivaldi://inspect/#remote-debugging` in Vivaldi and enable
-   **Allow remote debugging for this browser instance**. Run the connection check
-   and accept Vivaldi's permission prompt:
+   **3.1. Enable remote debugging.** Open `vivaldi://inspect/#remote-debugging`
+   in Vivaldi and enable **Allow remote debugging for this browser instance**.
+
+   **3.2. Check the connection.** Run the following command and accept Vivaldi's
+   permission prompt:
 
    ```sh
    browser-tabs doctor
