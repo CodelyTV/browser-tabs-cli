@@ -81,40 +81,29 @@ when applying a batch.
    [Vivaldi setup guide](docs/vivaldi.md) for other connection options and
    troubleshooting.
 
-4. Open and organize tabs. With one browser window open, its ID is selected
-   automatically. With several windows, run `browser-tabs windows` and add
-   `--window ID` to the operation. The CLI fails before modifying anything if the
-   destination is ambiguous.
+## Common use cases
 
-   ```sh
-   browser-tabs tab open https://codely.com/ --name "Codely home"
-   browser-tabs group open "Codely learning" https://codely.com/ https://codely.com/courses --color yellow
-   browser-tabs tab list
-   browser-tabs group list
-   ```
+### Open and organize tabs
 
-   Listings return the IDs needed for subsequent commands. For example, replace
-   `123` with a returned tab ID:
+With one browser window open, its ID is selected automatically. With several
+windows, run `browser-tabs windows` and add `--window ID` to the operation.
+The CLI fails before modifying anything if the destination is ambiguous.
 
-   ```sh
-   browser-tabs tab rename 123 "Codely courses"
-   ```
+```sh
+browser-tabs tab open https://codely.com/ --name "Codely home"
+browser-tabs group open "Codely learning" https://codely.com/ https://codely.com/courses --color yellow
+browser-tabs tab list
+browser-tabs group list
+```
 
-5. Download the [example JSON](tab-batch-schema/example.json), or use the copy
-   included in the clone. The commands below assume you saved it as
-   `tab-batch-schema/example.json`. Open it with one command. This creates 17 named tabs in three colored
-   native stacks:
+Listings return the IDs needed for subsequent commands. For example, replace
+`123` with a returned tab ID:
 
-   ```sh
-   browser-tabs batch open tab-batch-schema/example.json
-   ```
+```sh
+browser-tabs tab rename 123 "Codely courses"
+```
 
-   Keep the JSON response. Add `--verify-after-seconds 30` to wait 30 seconds
-   after organizing the tabs, then check names, group membership, colors, and loading.
-   `data.verified` and `data.ready` are `null` when verification is skipped. `data.windowId` identifies the selected window. Add it to the saved
-   JSON before resuming later so that the destination remains fixed.
-
-## Open tabs in batch
+### Open tabs in batch
 
 The authoritative format is [tab-batch-schema/schema.json](tab-batch-schema/schema.json).
 The CLI validates against that same schema, then checks key uniqueness and group
@@ -126,6 +115,27 @@ the local schema path.
 and group `color` are optional. Vivaldi requires at least two unpinned tabs per
 stack and limits tab names to 50 UTF-16 code units. Tabs open in the active
 workspace, in input order; grouping makes their members consecutive.
+
+Download the example JSON, or use the copy included in the clone. The commands
+below assume you saved it as `tab-batch-schema/example.json`. Open it to create
+17 named tabs in three colored native stacks, without post-open verification:
+
+```sh
+browser-tabs batch open tab-batch-schema/example.json
+```
+
+To check the result, add `--verify-after-seconds 30`. The CLI waits 30 seconds
+after organizing the tabs, then checks names, group membership, colors, and loading:
+
+```sh
+browser-tabs batch open tab-batch-schema/example.json --verify-after-seconds 30
+```
+
+Keep the JSON response. `data.verified` and `data.ready` are `null` when
+verification is skipped. `data.windowId` identifies the selected window. Add it
+to the saved JSON before resuming later so that the destination remains fixed.
+
+## Open tabs in batch
 
 Use a distinct `batchId` for each independent import. Keep the same ID and tab
 keys when retrying: only tabs tagged by this tool are reused. An existing personal
