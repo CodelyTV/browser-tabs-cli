@@ -101,28 +101,20 @@ GitHub release with provenance. It considers all commits since the previous tag:
 `feat` increments the minor version, breaking changes increment the major version,
 and other Conventional Commit types increment the patch version. The largest
 change wins. This includes documentation and dependency updates. Re-running CI
-without new commits does not publish another version. The first release is 1.0.0.
+without new commits does not publish another version.
 
 Release tags and npm are the version source of truth; the checkout keeps its
 development version. CI sets the package version before publishing without a
 release commit or release PR. Builds and dependency installation use pnpm;
 semantic-release uses npm only for registry publication.
 
-### One-time npm setup
+The [CI workflow](.github/workflows/ci.yml) invokes `pnpm exec semantic-release`,
+which loads [release.config.mjs](release.config.mjs). The `pnpm release` package
+script invokes the same locally installed executable. The configured plugins
+analyze commits, generate release notes, publish to npm, and create the GitHub
+release.
 
-1. For a new package, create a short-lived
-   [npm granular access token](https://docs.npmjs.com/creating-and-viewing-access-tokens/)
-   with permission to create and publish the package and **Bypass 2FA** enabled.
-   Store it as the repository Actions secret `NPM_TOKEN`, then run the **CI**
-   workflow on `main`. This first publication also includes provenance.
-2. In the package's npm settings, add a
-   [GitHub Actions trusted publisher](https://docs.npmjs.com/trusted-publishers/):
-   organization **CodelyTV**, repository **browser-tabs-cli**, workflow filename
-   **ci.yml**, and no environment name. Allow direct **npm publish**.
-3. Delete the GitHub `NPM_TOKEN` secret and revoke the temporary npm token.
-   Subsequent releases authenticate through GitHub OIDC, without an npm secret.
-   Node 24 supplies the required modern npm CLI; the workflow grants `id-token: write`.
-
-Until the initial npm authorization is configured, CI can validate the project
-but its release job cannot publish. Use **Run workflow** after setup to retry
-without creating an empty commit. Never put npm tokens in Git, commands, or chat.
+npm authenticates through GitHub Actions trusted publishing (OIDC), scoped to
+`CodelyTV/browser-tabs-cli` and `ci.yml`. The release job grants `id-token: write`
+and publishes with provenance. `GITHUB_TOKEN` authorizes Git tags and GitHub
+releases; npm does not need a stored token.

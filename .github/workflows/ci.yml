@@ -45,9 +45,7 @@ jobs:
           node-version-file: .nvmrc
           package-manager-cache: false
       - run: pnpm install --frozen-lockfile
-      - name: Publish npm package and GitHub release
-        run: pnpm release
+      - name: Publish with semantic-release
+        run: pnpm exec semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Optional bootstrap credential. Remove after configuring npm trusted publishing.
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
