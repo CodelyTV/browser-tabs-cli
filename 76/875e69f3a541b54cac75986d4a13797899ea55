@@ -1,0 +1,34 @@
+README.md
+  h_e75e968c274758 98,127,132,162,177
+docs/vivaldi.md
+  h_e75e968c274758 32
+scripts/smoke-vivaldi.mjs
+  h_e75e968c274758 76,83,135
+src/application/batch.ts
+  h_e75e968c274758 7
+src/application/execute.ts
+  h_e75e968c274758 10-11
+src/cli/help.ts
+  h_e75e968c274758 16
+src/cli/parse.ts
+  h_e75e968c274758 160,164,177,179
+src/domain/command.ts
+  h_e75e968c274758 23
+tests/batch.test.ts
+  h_e75e968c274758 19,46,48,51,60,73,77,91,94,107,113,118,126,142,155
+tests/cli.test.ts
+  h_e75e968c274758 79,104,108
+tests/connection.test.ts
+  h_e75e968c274758 90
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "76875e69f3a541b54cac75986d4a13797899ea55",
+  "prompts": {},
+  "humans": {
+    "h_e75e968c274758": {
+      "author": "Javier Ferrer González <javier.ferrer@codely.com>"
+    }
+  }
+}
