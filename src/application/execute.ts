@@ -8,9 +8,12 @@ export async function execute(
 ): Promise<unknown> {
   if (command.type === "windows") return browser.windows();
   if (command.type === "batch.open")
-    return new BatchService(browser).open(command.plan, command.waitMs);
+    return new BatchService(browser).open(command.plan, command.verifyAfterMs);
   if (command.type === "batch.verify")
-    return new BatchService(browser).verify(command.plan, command.waitMs);
+    return new BatchService(browser).verify(
+      command.plan,
+      command.verifyAfterMs,
+    );
   const windowId = await selectWindow(browser, command.windowId);
   switch (command.type) {
     case "tabs":

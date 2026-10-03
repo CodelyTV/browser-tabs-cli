@@ -1,10 +1,10 @@
 import { groupsFromTabs, type Browser, type Tab } from "../domain/browser.js";
 import type { Plan } from "../domain/plan.js";
 import { selectWindow } from "./window.js";
-import { assertPreserved, waitForBatch } from "./verification.js";
+import { assertPreserved, verifyAfterDelay } from "./verification.js";
 export class BatchService {
   constructor(private readonly browser: Browser) {}
-  async open(input: Plan, waitMs: number) {
+  async open(input: Plan, verifyAfterMs?: number) {
     this.checkLimits(input);
     const plan = {
       ...input,
@@ -59,7 +59,16 @@ export class BatchService {
           wanted.color,
         );
     }
-    const result = await waitForBatch(this.browser, plan, waitMs);
+    const result =
+      verifyAfterMs === undefined
+        ? {
+            windowId: plan.windowId,
+            verified: null,
+            ready: null,
+            tabIds: [...assignments.values()],
+            tabs: plan.tabs.length,
+          }
+        : await verifyAfterDelay(this.browser, plan, verifyAfterMs);
     const after = await this.browser.tabs(plan.windowId);
     assertPreserved(before, after, plan.batchId);
     return {
@@ -72,11 +81,11 @@ export class BatchService {
       ...result,
     };
   }
-  async verify(plan: Plan, waitMs: number) {
-    return waitForBatch(
+  async verify(plan: Plan, verifyAfterMs = 0) {
+    return verifyAfterDelay(
       this.browser,
       { ...plan, windowId: await selectWindow(this.browser, plan.windowId) },
-      waitMs,
+      verifyAfterMs,
     );
   }
   private checkLimits(plan: Plan) {

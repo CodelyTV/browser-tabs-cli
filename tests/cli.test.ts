@@ -79,7 +79,7 @@ test("group open compiles to the same batch contract", () => {
   if (input.kind !== "execute" || input.command.type !== "batch.open") return;
   assert.equal(input.command.plan.batchId, "stable-id");
   assert.equal(input.command.plan.tabs.length, 2);
-  assert.equal(input.command.waitMs, 30_000);
+  assert.equal(input.command.verifyAfterMs, undefined);
 });
 for (const args of [
   ["tab", "close", "--tabs", "1,1"],
@@ -105,7 +105,7 @@ test("batch validation is local and conflicting window overrides fail", async ()
       /conflicts/,
     );
     assert.throws(
-      () => parse(["batch", "open", file, "--wait", "301"]),
+      () => parse(["batch", "open", file, "--verify-after-seconds", "301"]),
       /300/,
     );
   } finally {
@@ -131,7 +131,35 @@ test("one command produces one execution and always closes its connection", asyn
   assert.equal(closed, true);
 });
 test("exit codes distinguish mismatches and pages still loading", () => {
+  assert.equal(statusCode({ verified: null, ready: null }), 0);
   assert.equal(statusCode({ verified: true, ready: true }), 0);
   assert.equal(statusCode({ verified: false, ready: false }), 1);
   assert.equal(statusCode({ verified: true, ready: false }), 2);
+});
+test("batch open and verify preserve an optional verification delay", () => {
+  const file = new URL("../tab-batch-schema/example.json", import.meta.url)
+    .pathname;
+  for (const action of ["open", "verify"]) {
+    for (const [args, expected] of [
+      [[], undefined],
+      [["--verify-after-seconds", "0"], 0],
+      [["--verify-after-seconds", "30"], 30_000],
+    ] as const) {
+      const input = parse(["batch", action, file, ...args]);
+      assert.equal(input.kind, "execute");
+      if (input.kind !== "execute") continue;
+      assert.ok(
+        input.command.type === "batch.open" ||
+          input.command.type === "batch.verify",
+      );
+      assert.equal(input.command.verifyAfterMs, expected);
+    }
+  }
+  for (const value of ["-1", "301", "NaN", "Infinity", " "])
+    assert.throws(() =>
+      parse(["batch", "open", file, "--verify-after-seconds", value]),
+    );
+  assert.throws(() => parse(["batch", "open", file, "--verify-after-seconds"]));
+  assert.throws(() => parse(["batch", "open", file, "--wait", "30"]));
+  assert.throws(() => parse(["batch", "apply", file]));
 });

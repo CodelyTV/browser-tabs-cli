@@ -89,7 +89,7 @@ test("the compiled runtime applies and verifies a batch with one execution over 
       const result = (await connection.execute({
         type: "batch.open",
         plan,
-        waitMs: 0,
+        verifyAfterMs: 0,
       })) as { verified: boolean; created: number };
       assert.equal(result.verified, true);
       assert.equal(result.created, 3);
@@ -97,6 +97,17 @@ test("the compiled runtime applies and verifies a batch with one execution over 
         requests.filter((request) => request.params.awaitPromise).length,
         1,
       );
+      const reused = (await connection.execute({
+        type: "batch.open",
+        plan,
+      })) as {
+        verified: null;
+        ready: null;
+        reused: number;
+      };
+      assert.equal(reused.verified, null);
+      assert.equal(reused.ready, null);
+      assert.equal(reused.reused, 3);
       assert.equal(
         requests.some((request) => request.params.targetId === "website"),
         false,

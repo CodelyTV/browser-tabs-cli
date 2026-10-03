@@ -20,8 +20,8 @@ export type Command =
       color?: Color;
     } & WindowTarget)
   | ({ type: "group.move"; groupId: string; tabIds: number[] } & WindowTarget)
-  | { type: "batch.open"; plan: Plan; waitMs: number }
-  | { type: "batch.verify"; plan: Plan; waitMs: number }
+  | { type: "batch.open"; plan: Plan; verifyAfterMs?: number }
+  | { type: "batch.verify"; plan: Plan; verifyAfterMs?: number }
   | ({ type: "batch.close"; batchId: string } & WindowTarget);
 export interface Connection {
   execute(command: Command): Promise<unknown>;

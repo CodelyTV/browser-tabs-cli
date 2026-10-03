@@ -21,8 +21,7 @@
 </p>
 
 Open, name, and organize tabs in the browser window you already use. Import a
-JSON file to create native groups, set their colors, wait for pages to load, and
-verify the result with one command. The project and package are named
+JSON file to create native groups, set their colors, and optionally verify the result with one command. The project and package are named
 `browser-tabs-cli`; the terminal command is `browser-tabs`.
 
 Vivaldi is the first adapter. The CLI connects to an already running browser;
@@ -92,15 +91,15 @@ when applying a batch.
    ```
 
 5. Import the included example. This creates 17 named tabs in three colored
-   native stacks and verifies them in the same command:
+   native stacks:
 
    ```sh
-   browser-tabs batch open tab-batch-schema/example.json --wait 60
+   browser-tabs batch open tab-batch-schema/example.json
    ```
 
-   Keep the JSON response. `data.verified` confirms names, exact group membership,
-   colors, and ownership; `data.ready` also requires every page to have finished
-   loading. `data.windowId` identifies the selected window. Add it to the saved
+   Keep the JSON response. Add `--verify-after-seconds 30` to wait 30 seconds
+   after organizing the tabs, then check names, group membership, colors, and loading.
+   `data.verified` and `data.ready` are `null` when verification is skipped. `data.windowId` identifies the selected window. Add it to the saved
    JSON before resuming later so that the destination remains fixed.
 
 ## Open tabs in batch
@@ -124,13 +123,14 @@ which a retry of the original plan can complete. Batches are not transactions.
 
 ```sh
 browser-tabs batch validate tab-batch-schema/example.json
-browser-tabs batch open tab-batch-schema/example.json --wait 60
-browser-tabs batch verify tab-batch-schema/example.json --wait 60
+browser-tabs batch open tab-batch-schema/example.json
+browser-tabs batch verify tab-batch-schema/example.json --verify-after-seconds 30
 browser-tabs batch close codely-example
 ```
 
-`validate` is entirely local. `open` already verifies; call `verify` only to check
-later or wait again for unfinished pages. `close` explicitly closes only tabs
+`validate` is entirely local. `open` skips post-open verification unless
+`--verify-after-seconds` is supplied. `verify` explicitly checks an existing batch
+immediately, or after the supplied delay. `close` explicitly closes only tabs
 owned by that batch. Review their contents first if you have since used them for
 other work.
 
@@ -144,24 +144,24 @@ Run each command below as `browser-tabs <command>`, for example `browser-tabs ta
 Square brackets mean optional arguments; do not type the brackets. All IDs come
 from the JSON returned by `windows`, `tab list`, or `group list`.
 
-| Command                                                                               | Operation                                                                  |
-| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `doctor`                                                                              | Probe native browser access and list windows without changing tabs         |
-| `windows`                                                                             | List all open windows                                                      |
-| `tab list [--window ID]`                                                              | List URLs, page titles, custom names, loading state, groups, and ownership |
-| `tab open URL [--name NAME] [--window ID]`                                            | Open a background tab at the top level                                     |
-| `tab rename ID NAME [--window ID]`                                                    | Set a visible native tab name                                              |
-| `tab close --tabs ID,ID [--window ID]`                                                | Close exactly the selected tabs                                            |
-| `group list [--window ID]`                                                            | List native groups and their tab IDs                                       |
-| `group open TITLE URL... [--color COLOR] [--batch ID] [--wait SECONDS] [--window ID]` | Open URLs as a new stack, wait, and verify                                 |
-| `group create TITLE --tabs ID,ID [--color COLOR] [--window ID]`                       | Stack selected existing tabs                                               |
-| `group rename ID TITLE [--window ID]`                                                 | Rename a stack                                                             |
-| `group color ID COLOR [--window ID]`                                                  | Change a stack color                                                       |
-| `group move ID --tabs ID,ID [--window ID]`                                            | Move selected tabs into the target stack                                   |
-| `batch validate FILE`                                                                 | Validate an import without connecting to a browser                         |
-| `batch open FILE [--wait SECONDS] [--window ID]`                                     | Open all tabs, name, group, color, wait, and verify                        |
-| `batch verify FILE [--wait SECONDS] [--window ID]`                                    | Read and verify an existing batch                                          |
-| `batch close ID [--window ID]`                                                        | Close tabs tagged with the given batch ID                                  |
+| Command                                                                                               | Operation                                                                  |
+| ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `doctor`                                                                                              | Probe native browser access and list windows without changing tabs         |
+| `windows`                                                                                             | List all open windows                                                      |
+| `tab list [--window ID]`                                                                              | List URLs, page titles, custom names, loading state, groups, and ownership |
+| `tab open URL [--name NAME] [--window ID]`                                                            | Open a background tab at the top level                                     |
+| `tab rename ID NAME [--window ID]`                                                                    | Set a visible native tab name                                              |
+| `tab close --tabs ID,ID [--window ID]`                                                                | Close exactly the selected tabs                                            |
+| `group list [--window ID]`                                                                            | List native groups and their tab IDs                                       |
+| `group open TITLE URL... [--color COLOR] [--batch ID] [--verify-after-seconds SECONDS] [--window ID]` | Open URLs as a new stack; optionally verify                                |
+| `group create TITLE --tabs ID,ID [--color COLOR] [--window ID]`                                       | Stack selected existing tabs                                               |
+| `group rename ID TITLE [--window ID]`                                                                 | Rename a stack                                                             |
+| `group color ID COLOR [--window ID]`                                                                  | Change a stack color                                                       |
+| `group move ID --tabs ID,ID [--window ID]`                                                            | Move selected tabs into the target stack                                   |
+| `batch validate FILE`                                                                                 | Validate an import without connecting to a browser                         |
+| `batch open FILE [--verify-after-seconds SECONDS] [--window ID]`                                      | Open, name, group, and color tabs; optionally verify                       |
+| `batch verify FILE [--verify-after-seconds SECONDS] [--window ID]`                                    | Read and verify an existing batch                                          |
+| `batch close ID [--window ID]`                                                                        | Close tabs tagged with the given batch ID                                  |
 
 Colors: `grey`, `blue`, `red`, `yellow`, `green`, `pink`, `purple`, `teal`, `orange`.
 `group open` uses the batch engine; supply `--batch` for a predictable retry ID,
@@ -174,15 +174,24 @@ Global options: `--help`, `--browser vivaldi`, `--cdp auto|PORT|URL`.
 endpoint discovery. Only loopback HTTP and WebSocket endpoints are accepted.
 `--window` cannot conflict with a JSON `windowId`.
 
-`--wait` accepts 0 to 300 seconds. The defaults are 30 for `open` and `group open`,
-and 0 for `verify`. The CLI returns JSON with `ok`, `data`, and `elapsedMs`, or
-`ok: false` and `error`. Exit codes:
+`--verify-after-seconds` accepts a number from 0 to 300. After opening and
+organizing all tabs, the CLI waits that many seconds and verifies once. It does
+not poll or return early when pages finish loading. `0` verifies immediately.
+Without the flag, `batch open` and `group open` skip post-open verification and
+return `verified: null` and `ready: null`. Input validation, ownership checks, and
+protection of existing tabs always apply. `batch verify` checks immediately by
+default because verification is its explicit purpose.
 
-| Code | Meaning                                                                       |
-| ---- | ----------------------------------------------------------------------------- |
-| `0`  | Command succeeded; batch structure is verified and all pages finished loading |
-| `1`  | Invalid input, connection/operation failure, or verification mismatch         |
-| `2`  | Batch structure is verified, but pages are still loading                      |
+The CLI returns JSON with `ok`, `data`, and `elapsedMs`, or `ok: false` and
+`error`. When requested, `data.verified` confirms names, exact group membership,
+colors, and ownership; `data.ready` additionally requires all pages to finish
+loading. Exit codes:
+
+| Code | Meaning                                                                        |
+| ---- | ------------------------------------------------------------------------------ |
+| `0`  | Command succeeded; if verification was requested, structure and loading passed |
+| `1`  | Invalid input, connection/operation failure, or verification mismatch          |
+| `2`  | Batch structure is verified, but pages are still loading                       |
 
 A completed load can still display an HTTP error, login screen, or blocked page.
 The CLI verifies browser state, not the editorial relevance or content of a page.

@@ -7,7 +7,7 @@ Date: 2026-10-03. macOS, Node.js 24.18.0, Vivaldi 8.2.4133.80.
 Strict TypeScript compilation, both runtime builds, 35 automated tests, and
 Oxlint and Oxfmt checks pass. Tests cover schema validation, command parsing, window
 selection, partial-failure recovery, ownership conflicts, exact group membership,
-load deadlines, native adapter mappings, and the built runtime over a loopback
+optional delayed verification, native adapter mappings, and the built runtime over a loopback
 CDP WebSocket fixture. No real browser is required for the automated suite.
 
 ## Real Vivaldi

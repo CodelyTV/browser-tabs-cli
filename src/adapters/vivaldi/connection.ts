@@ -41,7 +41,8 @@ export async function connectVivaldi(
           const attached = sessionId;
           return {
             async execute(command: Command) {
-              const waitMs = "waitMs" in command ? command.waitMs : 0;
+              const verifyAfterMs =
+                "verifyAfterMs" in command ? (command.verifyAfterMs ?? 0) : 0;
               const result = await cdp.request<Evaluation>(
                 "Runtime.evaluate",
                 {
@@ -50,7 +51,7 @@ export async function connectVivaldi(
                   returnByValue: true,
                 },
                 attached,
-                Math.max(60_000, waitMs + 30_000),
+                Math.max(60_000, verifyAfterMs + 30_000),
               );
               if (result.exceptionDetails)
                 throw new Error(

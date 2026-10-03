@@ -82,23 +82,14 @@ export function verifySnapshot(plan: ResolvedPlan, tabs: Tab[]): Verification {
     tabs: plan.tabs.length,
   };
 }
-export async function waitForBatch(
+export async function verifyAfterDelay(
   browser: Browser,
   plan: ResolvedPlan,
-  waitMs: number,
+  delayMs: number,
 ): Promise<Verification> {
-  const deadline = performance.now() + waitMs;
-  let result = verifySnapshot(plan, await browser.tabs(plan.windowId));
-  while (result.verified && !result.ready && performance.now() < deadline) {
-    await new Promise((resolve) =>
-      setTimeout(
-        resolve,
-        Math.max(0, Math.min(200, deadline - performance.now())),
-      ),
-    );
-    result = verifySnapshot(plan, await browser.tabs(plan.windowId));
-  }
-  return result;
+  if (delayMs > 0)
+    await new Promise<void>((resolve) => setTimeout(resolve, delayMs));
+  return verifySnapshot(plan, await browser.tabs(plan.windowId));
 }
 function stableTabState(tab: Tab) {
   return JSON.stringify({

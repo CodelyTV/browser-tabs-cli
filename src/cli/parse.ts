@@ -34,7 +34,7 @@ export function parse(argv: string[]): Input {
       tabs: { type: "string" },
       color: { type: "string" },
       batch: { type: "string" },
-      wait: { type: "string" },
+      "verify-after-seconds": { type: "string" },
     },
   });
   if (values.help || !words.length) return { kind: "help" };
@@ -49,14 +49,15 @@ export function parse(argv: string[]): Input {
   };
   const windowId = values.window === undefined ? undefined : id(values.window);
   const target = windowId === undefined ? {} : { windowId };
-  const waitMs = (defaultSeconds: number) => {
-    const seconds =
-      values.wait === undefined
-        ? defaultSeconds
-        : Number(text(values.wait, "--wait"));
+  const verificationOptions = () => {
+    const value = values["verify-after-seconds"];
+    if (value === undefined) return {};
+    const seconds = Number(text(value, "--verify-after-seconds"));
     if (!Number.isFinite(seconds) || seconds < 0 || seconds > 300)
-      throw new Error("--wait must be between 0 and 300 seconds.");
-    return seconds * 1000;
+      throw new Error(
+        "--verify-after-seconds must be between 0 and 300 seconds.",
+      );
+    return { verifyAfterMs: seconds * 1000 };
   };
   let command: Command;
   if (words[0] === "doctor" || words[0] === "windows") {
@@ -135,7 +136,7 @@ export function parse(argv: string[]): Input {
         };
         break;
       case "group open": {
-        check(undefined, ["window", "color", "batch", "wait"]);
+        check(undefined, ["window", "color", "batch", "verify-after-seconds"]);
         if (args.length < 2)
           throw new Error("Provide a group title and its URLs.");
         const plan = parsePlan({
@@ -157,14 +158,14 @@ export function parse(argv: string[]): Input {
             },
           ],
         });
-        command = { type: "batch.open", plan, waitMs: waitMs(30) };
+        command = { type: "batch.open", plan, ...verificationOptions() };
         break;
       }
       case "batch validate":
       case "batch open":
       case "batch verify": {
         const local = words[1] === "validate";
-        check(1, local ? [] : ["window", "wait"]);
+        check(1, local ? [] : ["window", "verify-after-seconds"]);
         const plan = parsePlan(JSON.parse(readFileSync(arg(0), "utf8")));
         if (local) return { kind: "validate", plan };
         if (
@@ -176,7 +177,7 @@ export function parse(argv: string[]): Input {
         command = {
           type: words[1] === "open" ? "batch.open" : "batch.verify",
           plan: { ...plan, ...target },
-          waitMs: waitMs(words[1] === "open" ? 30 : 0),
+          ...verificationOptions(),
         };
         break;
       }

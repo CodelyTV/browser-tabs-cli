@@ -29,7 +29,7 @@ pass `--cdp`, or launch Vivaldi with special flags.
 
    ```sh
    browser-tabs tab open https://codely.com/courses --name "Codely Courses"
-   browser-tabs batch open tab-batch-schema/example.json --wait 60
+   browser-tabs batch open tab-batch-schema/example.json --verify-after-seconds 30
    ```
 
 With one window open, it is selected automatically. With several windows, run

@@ -3,6 +3,7 @@ import test from "node:test";
 import { BatchService } from "../src/application/batch.js";
 import { execute } from "../src/application/execute.js";
 import { selectWindow } from "../src/application/window.js";
+import { verifyAfterDelay } from "../src/application/verification.js";
 import { fixture, plan } from "./support/native.js";
 
 test("batch opens every URL before names and groups, preserving an existing locked stack", async () => {
@@ -135,7 +136,7 @@ test("verification detects incorrect names, split groups and colors", async () =
   assert.ok(result.issues.some((issue) => issue.includes("Wrong name")));
   assert.ok(result.issues.some((issue) => issue.includes("Split group")));
 });
-test("loading is separate from structural correctness and can be polled without mutations", async () => {
+test("loading is separate from structural correctness and can be checked later without mutations", async () => {
   const { api, browser } = fixture();
   api.loading = true;
   const service = new BatchService(browser);
@@ -146,8 +147,49 @@ test("loading is separate from structural correctness and can be polled without 
   setTimeout(() => {
     for (const tab of api.rows) tab.status = "complete";
   }, 10);
-  assert.equal((await service.verify(plan, 500)).ready, true);
+  assert.equal((await service.verify(plan, 20)).ready, true);
   assert.equal(api.mutations.length, count);
+});
+test("opening skips verification by default, while an explicit zero checks immediately", async () => {
+  const { api, browser } = fixture();
+  api.loading = true;
+  const service = new BatchService(browser);
+  const opened = await service.open(plan);
+  assert.equal(opened.verified, null);
+  assert.equal(opened.ready, null);
+  assert.equal(opened.created, 3);
+  assert.equal(opened.groups.length, 1);
+  const checked = await service.open(plan, 0);
+  assert.equal(checked.verified, true);
+  assert.equal(checked.ready, false);
+  assert.equal(checked.reused, 3);
+  assert.equal((await service.verify(plan)).ready, false);
+});
+test("verification waits the full requested interval and reads once, even when pages are ready", async (t) => {
+  const { browser } = fixture();
+  await new BatchService(browser).open(plan);
+  t.mock.timers.enable({ apis: ["setTimeout"] });
+  const reads = t.mock.method(browser, "tabs");
+  const pending = verifyAfterDelay(browser, { ...plan, windowId: 1 }, 30_000);
+  t.mock.timers.tick(29_999);
+  await Promise.resolve();
+  assert.equal(reads.mock.callCount(), 0);
+  t.mock.timers.tick(1);
+  assert.equal((await pending).ready, true);
+  assert.equal(reads.mock.callCount(), 1);
+});
+test("skipping verification still detects changes to pre-existing tabs", async () => {
+  const { api, browser } = fixture();
+  const personal = api.seed();
+  const rename = browser.rename.bind(browser);
+  browser.rename = async (...args) => {
+    await rename(...args);
+    api.patch(personal, { fixedTitle: "Unexpected change" });
+  };
+  await assert.rejects(
+    new BatchService(browser).open(plan),
+    /changed or disappeared/,
+  );
 });
 test("batch close removes only its own tabs", async () => {
   const { api, browser } = fixture();
