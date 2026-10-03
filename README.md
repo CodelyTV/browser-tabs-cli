@@ -135,7 +135,52 @@ Keep the JSON response. `data.verified` and `data.ready` are `null` when
 verification is skipped. `data.windowId` identifies the selected window. Add it
 to the saved JSON before resuming later so that the destination remains fixed.
 
-## Open tabs in batch
+## All commands
+
+Run each command below as `browser-tabs <command>`, for example `browser-tabs tab list`.
+Square brackets mean optional arguments; do not type the brackets. All IDs come
+from the JSON returned by `windows`, `tab list`, or `group list`.
+
+### Connection and windows
+
+| Command   | Operation                                                          |
+| --------- | ------------------------------------------------------------------ |
+| `doctor`  | Probe native browser access and list windows without changing tabs |
+| `windows` | List all open windows                                              |
+
+### Tabs
+
+| Command                                    | Operation                                                                  |
+| ------------------------------------------ | -------------------------------------------------------------------------- |
+| `tab list [--window ID]`                   | List URLs, page titles, custom names, loading state, groups, and ownership |
+| `tab open URL [--name NAME] [--window ID]` | Open a background tab at the top level                                     |
+| `tab rename ID NAME [--window ID]`         | Set a visible native tab name                                              |
+| `tab close --tabs ID,ID [--window ID]`     | Close exactly the selected tabs                                            |
+
+### Groups and stacks
+
+| Command                                                                                               | Operation                                   |
+| ----------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| `group list [--window ID]`                                                                            | List native groups and their tab IDs        |
+| `group open TITLE URL... [--color COLOR] [--batch ID] [--verify-after-seconds SECONDS] [--window ID]` | Open URLs as a new stack; optionally verify |
+| `group create TITLE --tabs ID,ID [--color COLOR] [--window ID]`                                       | Stack selected existing tabs                |
+| `group rename ID TITLE [--window ID]`                                                                 | Rename a stack                              |
+| `group color ID COLOR [--window ID]`                                                                  | Change a stack color                        |
+| `group move ID --tabs ID,ID [--window ID]`                                                            | Move selected tabs into the target stack    |
+
+Colors: `grey`, `blue`, `red`, `yellow`, `green`, `pink`, `purple`, `teal`, `orange`.
+`group open` uses the batch engine; supply `--batch` for a predictable retry ID,
+or keep the generated `data.batchId`. Individual mutation commands do not all
+have batch-style retry semantics, so inspect state after an interrupted command.
+
+### Batches
+
+| Command                                                            | Operation                                            |
+| ------------------------------------------------------------------ | ---------------------------------------------------- |
+| `batch validate FILE`                                              | Validate an import without connecting to a browser   |
+| `batch open FILE [--verify-after-seconds SECONDS] [--window ID]`   | Open, name, group, and color tabs; optionally verify |
+| `batch verify FILE [--verify-after-seconds SECONDS] [--window ID]` | Read and verify an existing batch                    |
+| `batch close ID [--window ID]`                                     | Close tabs tagged with the given batch ID            |
 
 Use a distinct `batchId` for each independent import. Keep the same ID and tab
 keys when retrying: only tabs tagged by this tool are reused. An existing personal
@@ -177,41 +222,15 @@ The CLI preserves URLs exactly. URL cleanup, deduplication, source selection,
 short-name policies, and decisions about which tabs belong together belong to
 the caller or Skill. No Slack or weekly-news rules are built into the program.
 
-## All commands
-
-Run each command below as `browser-tabs <command>`, for example `browser-tabs tab list`.
-Square brackets mean optional arguments; do not type the brackets. All IDs come
-from the JSON returned by `windows`, `tab list`, or `group list`.
-
-| Command                                                                                               | Operation                                                                  |
-| ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `doctor`                                                                                              | Probe native browser access and list windows without changing tabs         |
-| `windows`                                                                                             | List all open windows                                                      |
-| `tab list [--window ID]`                                                                              | List URLs, page titles, custom names, loading state, groups, and ownership |
-| `tab open URL [--name NAME] [--window ID]`                                                            | Open a background tab at the top level                                     |
-| `tab rename ID NAME [--window ID]`                                                                    | Set a visible native tab name                                              |
-| `tab close --tabs ID,ID [--window ID]`                                                                | Close exactly the selected tabs                                            |
-| `group list [--window ID]`                                                                            | List native groups and their tab IDs                                       |
-| `group open TITLE URL... [--color COLOR] [--batch ID] [--verify-after-seconds SECONDS] [--window ID]` | Open URLs as a new stack; optionally verify                                |
-| `group create TITLE --tabs ID,ID [--color COLOR] [--window ID]`                                       | Stack selected existing tabs                                               |
-| `group rename ID TITLE [--window ID]`                                                                 | Rename a stack                                                             |
-| `group color ID COLOR [--window ID]`                                                                  | Change a stack color                                                       |
-| `group move ID --tabs ID,ID [--window ID]`                                                            | Move selected tabs into the target stack                                   |
-| `batch validate FILE`                                                                                 | Validate an import without connecting to a browser                         |
-| `batch open FILE [--verify-after-seconds SECONDS] [--window ID]`                                      | Open, name, group, and color tabs; optionally verify                       |
-| `batch verify FILE [--verify-after-seconds SECONDS] [--window ID]`                                    | Read and verify an existing batch                                          |
-| `batch close ID [--window ID]`                                                                        | Close tabs tagged with the given batch ID                                  |
-
-Colors: `grey`, `blue`, `red`, `yellow`, `green`, `pink`, `purple`, `teal`, `orange`.
-`group open` uses the batch engine; supply `--batch` for a predictable retry ID,
-or keep the generated `data.batchId`. Individual mutation commands do not all
-have batch-style retry semantics, so inspect state after an interrupted command.
+### Connection options
 
 Global options: `--help`, `--browser vivaldi`, `--cdp auto|PORT|URL`.
 `BROWSER_TABS_CDP` supplies the default endpoint.
 `BROWSER_TABS_VIVALDI_DATA_DIR` overrides the directory used for automatic
 endpoint discovery. Only loopback HTTP and WebSocket endpoints are accepted.
 `--window` cannot conflict with a JSON `windowId`.
+
+### Verification and results
 
 `--verify-after-seconds` accepts a number from 0 to 300. After opening and
 organizing all tabs, the CLI waits that many seconds and verifies once. It does
