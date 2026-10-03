@@ -10,7 +10,8 @@
     "dist",
     "tab-batch-schema",
     "README.md",
-    "docs"
+    "docs",
+    "CONTRIBUTING.md"
   ],
   "engines": {
     "node": "^24.0.0"

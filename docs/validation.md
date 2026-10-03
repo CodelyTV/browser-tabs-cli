@@ -4,7 +4,7 @@ Date: 2026-10-03. macOS, Node.js 24.18.0, Vivaldi 8.2.4133.80.
 
 ## Automated checks
 
-Strict TypeScript compilation, both runtime builds, 35 automated tests, and
+Strict TypeScript compilation, both runtime builds, the automated test suite, and
 Oxlint and Oxfmt checks pass. Tests cover schema validation, command parsing, window
 selection, partial-failure recovery, ownership conflicts, exact group membership,
 optional delayed verification, native adapter mappings, and the built runtime over a loopback
