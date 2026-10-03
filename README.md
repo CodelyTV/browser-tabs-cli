@@ -252,18 +252,24 @@ interchangeable.
 ## Design decisions and discarded alternatives
 
 This tool focuses on opening and organizing native tabs in an existing browser
-with a small, typed contract. A direct CDP connection reaches Vivaldi's bundled
-privileged UI, so the implementation needs neither the AIPex extension/daemon
-setup nor a general page-automation engine. Browser-specific code stays in an
-adapter; batch policy, validation, and verification can be reused. The tradeoff is
-maintaining private Vivaldi APIs, with probes and real-browser tests to detect changes.
+with a small, typed contract. Direct CDP access to Vivaldi's bundled privileged UI
+avoids an additional extension or daemon. Browser-specific code stays in an
+adapter; validation, batch application, retries and verification are reusable.
+Existing tools can provide CDP transport, but the reviewed alternatives do not
+supply this complete native Vivaldi tab-plan contract with the same minimal setup.
+The tradeoff is maintaining private APIs, backed by capability probes and real
+browser tests.
 
-`agent-browser` can attach to an existing visible browser using CDP, and it already
-supports batching. Those are not reasons to discard it. Its documented commands
-and Chrome DevTools MCP do not supply this complete native Vivaldi naming and
-stack contract; either upstream would still need a browser-specific adapter and
-an agreed support scope. A future upstream contribution remains possible. See
-[design.md](docs/design.md) for the evidence, alternatives, and compatibility limits.
+Upstream integration is possible, but delivery should not depend on a broad
+Vivaldi PR clearing agent-browser's 17-page queue or AIPex's older pending PRs.
+AIPex's standalone CLI has moved into its main project, which uses an extension
+and daemon. Browser Use CLI delegates to Browser Harness; both can attach to an
+existing browser, but the current CLI path uses a daemon. browsemake's CLI launches
+its own Chromium profile. We would gladly switch to an upstream project and stop
+maintaining `browser-tabs-cli` once it covers these features without requiring
+extensions or background daemons. See [design.md](docs/design.md) for the dated
+evidence, technical comparisons and the distinction between facts and our
+assessment of integration risk.
 
 ## Development and tests
 
