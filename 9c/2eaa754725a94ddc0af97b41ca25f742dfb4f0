@@ -1,0 +1,35 @@
+.github/dependabot.yml
+  s_9749545b5cfef9::t_bd88a191be0217 1-51
+.github/workflows/check.yml
+  s_9749545b5cfef9::t_4a094eb4a4e751 13,17-19
+.gitignore
+  s_9749545b5cfef9::t_347d00605d68e6 6
+.prettierignore
+  s_9749545b5cfef9::t_14b38076003d74 3
+README.md
+  s_9749545b5cfef9::t_03a9a833001b26 13-15,25-27,31-33,43,279-281,285-288,293-295,301,303-316
+docs/vivaldi.md
+  s_9749545b5cfef9::t_59bef02bd3778c 48
+package.json
+  s_9749545b5cfef9::t_883289ae5ce28d 27,29,32,47-48
+pnpm-lock.yaml
+  s_9749545b5cfef9::t_9568822f951372 1-690
+pnpm-workspace.yaml
+  s_9749545b5cfef9::t_24cab40f5d9590 1-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "9c2eaa754725a94ddc0af97b41ca25f742dfb4f0",
+  "prompts": {},
+  "sessions": {
+    "s_9749545b5cfef9": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0fb8d-b916-7b91-8599-a16e1c1833c7",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Javier Ferrer González <javier.ferrer@codely.com>"
+    }
+  }
+}
