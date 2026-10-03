@@ -1,0 +1,14 @@
+release.config.mjs
+  h_e75e968c274758 38-42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "4beaa5d67b094cd99c8c5c4f6c6e1cc77c56d6c4",
+  "prompts": {},
+  "humans": {
+    "h_e75e968c274758": {
+      "author": "Javier Ferrer González <javier.ferrer@codely.com>"
+    }
+  }
+}
