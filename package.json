@@ -24,7 +24,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "dev": "tsx src/cli/main.ts",
+    "dev": "npm run build && node dist/main.js",
     "typecheck": "tsc --noEmit",
     "test": "npm run build && node --import tsx --test tests/*.test.ts",
     "format": "prettier --write .",
