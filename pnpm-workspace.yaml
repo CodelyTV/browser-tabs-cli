@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://json.schemastore.org/pnpm-workspace.json
+
+# Corepack and CI install the pinned version; keep the lockfile readable by Dependabot.
+# https://github.com/dependabot/dependabot-core/issues/15904
+pmOnFail: ignore
+engineStrict: true
+
+minimumReleaseAge: 10080 # 7 days
+minimumReleaseAgeStrict: true
+minimumReleaseAgeExcludePrune: true
+trustPolicy: no-downgrade
+trustPolicyExcludePrune: true
+blockExoticSubdeps: true
+dedupePeerDependents: true
+
+update:
+  githubActions: true
+
+audit:
+  ignorePrune: true
+
+allowBuilds:
+  esbuild: true

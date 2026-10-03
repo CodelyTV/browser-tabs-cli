@@ -1,0 +1,120 @@
+{
+  "$schema": "./schema.json",
+  "version": 1,
+  "batchId": "codely-example",
+  "tabs": [
+    {
+      "key": "home",
+      "url": "https://codely.com/",
+      "name": "Codely Home",
+      "groupKey": "learning"
+    },
+    {
+      "key": "courses",
+      "url": "https://codely.com/courses",
+      "name": "Codely Courses",
+      "groupKey": "learning"
+    },
+    {
+      "key": "x",
+      "url": "https://x.com/codelytv",
+      "name": "Codely X",
+      "groupKey": "social-networks"
+    },
+    {
+      "key": "github",
+      "url": "https://github.com/codelytv",
+      "name": "Codely GitHub",
+      "groupKey": "social-networks"
+    },
+    {
+      "key": "youtube",
+      "url": "https://youtube.com/codelytv",
+      "name": "Codely YouTube",
+      "groupKey": "social-networks"
+    },
+    {
+      "key": "twitch",
+      "url": "https://twitch.tv/codelytv",
+      "name": "Codely Twitch",
+      "groupKey": "social-networks"
+    },
+    {
+      "key": "linkedin",
+      "url": "https://www.linkedin.com/company/codelytv/",
+      "name": "Codely LinkedIn",
+      "groupKey": "social-networks"
+    },
+    {
+      "key": "agent-harness",
+      "url": "https://github.com/CodelyTV/agent-harness",
+      "name": "Agent Harness",
+      "groupKey": "open-source"
+    },
+    {
+      "key": "pr-size-labeler",
+      "url": "https://github.com/CodelyTV/pr-size-labeler",
+      "name": "PR Size Labeler",
+      "groupKey": "open-source"
+    },
+    {
+      "key": "dotly",
+      "url": "https://github.com/CodelyTV/dotly",
+      "name": "Dotly Shell",
+      "groupKey": "open-source"
+    },
+    {
+      "key": "request-review-by-path",
+      "url": "https://github.com/CodelyTV/request-review-by-path",
+      "name": "Review by Path",
+      "groupKey": "open-source"
+    },
+    {
+      "key": "typescript",
+      "url": "https://github.com/CodelyTV/typescript-ddd-example",
+      "name": "TypeScript DDD",
+      "groupKey": "open-source"
+    },
+    {
+      "key": "jetbrains-theme",
+      "url": "https://github.com/CodelyTV/jetbrains-theme",
+      "name": "JetBrains Theme",
+      "groupKey": "open-source"
+    },
+    {
+      "key": "java",
+      "url": "https://github.com/CodelyTV/java-ddd-example",
+      "name": "Java DDD",
+      "groupKey": "open-source"
+    },
+    {
+      "key": "php",
+      "url": "https://github.com/CodelyTV/php-ddd-example",
+      "name": "PHP DDD",
+      "groupKey": "open-source"
+    },
+    {
+      "key": "bash-actions",
+      "url": "https://github.com/CodelyTV/bash-github_actions-skeleton",
+      "name": "Bash Actions Skeleton",
+      "groupKey": "open-source"
+    }
+  ],
+  "groups": [
+    {
+      "key": "learning",
+      "title": "Codely Learning",
+      "color": "yellow"
+    },
+    {
+      "key": "social-networks",
+      "title": "Social Networks",
+      "color": "blue"
+    },
+    {
+      "key": "open-source",
+      "title": "Open Source Projects",
+      "color": "green"
+    }
+  ]
+}

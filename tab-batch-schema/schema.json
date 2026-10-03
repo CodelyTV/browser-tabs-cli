@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/CodelyTV/browser-tabs-cli/main/tab-batch-schema/schema.json",
+  "title": "Browser Tabs CLI batch",
+  "description": "Open and organize explicit tabs in an existing window. Unique keys, valid group references, nonempty groups, and browser-specific limits are additionally checked by the CLI.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "batchId", "tabs", "groups"],
+  "properties": {
+    "$schema": {
+      "$ref": "#/$defs/text",
+      "description": "Optional editor reference. The CLI never fetches this value."
+    },
+    "version": { "const": 1 },
+    "batchId": {
+      "$ref": "#/$defs/text",
+      "description": "Stable ownership ID for replay and partial recovery."
+    },
+    "windowId": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991,
+      "description": "Omit when exactly one browser window is open."
+    },
+    "tabs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/tab" }
+    },
+    "groups": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/group" },
+      "description": "Use [] for independent tabs. Vivaldi needs at least two tabs per stack."
+    }
+  },
+  "$defs": {
+    "text": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "tab": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "url"],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/text",
+          "description": "Unique tab key within this batch."
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "not": {
+            "pattern": "^([jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]|[dD][aA][tT][aA]|[vV][bB][sS][cC][rR][iI][pP][tT]):"
+          },
+          "description": "Absolute navigation URL, preserved exactly including query and fragment."
+        },
+        "name": {
+          "$ref": "#/$defs/text",
+          "description": "Optional visible tab name. Vivaldi limits it to 50 UTF-16 code units."
+        },
+        "groupKey": {
+          "$ref": "#/$defs/text",
+          "description": "A groups[].key; omit for an independent tab."
+        }
+      }
+    },
+    "group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "title"],
+      "properties": {
+        "key": { "$ref": "#/$defs/text" },
+        "title": { "$ref": "#/$defs/text" },
+        "color": {
+          "type": "string",
+          "enum": [
+            "grey",
+            "blue",
+            "red",
+            "yellow",
+            "green",
+            "pink",
+            "purple",
+            "teal",
+            "orange"
+          ]
+        }
+      }
+    }
+  }
+}
