@@ -20,7 +20,7 @@
     "type": "git",
     "url": "git+https://github.com/CodelyTV/browser-tabs-cli.git"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "node scripts/build.mjs",
     "dev": "pnpm build && node dist/main.js",
