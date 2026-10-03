@@ -1,0 +1,21 @@
+CONTRIBUTING.md
+  h_e75e968c274758 1-92,95-128
+  h_e75e968c274758 93-94
+README.md
+  h_e75e968c274758 226-241
+package.json
+  h_e75e968c274758 13-14
+docs/validation.md
+  h_e75e968c274758 7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "db5888c7b4f617fa7ab1fb7a57190c4cc3f6b6f5",
+  "prompts": {},
+  "humans": {
+    "h_e75e968c274758": {
+      "author": "Javier Ferrer González <javier.ferrer@codely.com>"
+    }
+  }
+}
