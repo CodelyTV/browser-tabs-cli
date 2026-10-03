@@ -1,0 +1,21 @@
+README.md
+  s_9749545b5cfef9::t_7f7716f38df5f3 255-272
+docs/design.md
+  s_9749545b5cfef9::t_6d6bdbd80353ff 36-51,55-137,153-164
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "f7311633766833a6c16df006bc972499fc6afb77",
+  "prompts": {},
+  "sessions": {
+    "s_9749545b5cfef9": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0fb8d-b916-7b91-8599-a16e1c1833c7",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Javier Ferrer González <javier.ferrer@codely.com>"
+    }
+  }
+}
