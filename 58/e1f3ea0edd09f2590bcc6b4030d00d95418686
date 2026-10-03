@@ -1,0 +1,27 @@
+README.md
+  s_9749545b5cfef9::t_43f253ee9a2a38 5-6,29,34-35,48,55,60,65-68,75,82,148-151,165
+docs/design.md
+  s_9749545b5cfef9::t_e6691fe72669ac 12
+docs/vivaldi.md
+  s_9749545b5cfef9::t_6dc412dd3c9bad 11-12,47
+package.json
+  s_9749545b5cfef9::t_91afecaf9d24ab 8
+src/cli/help.ts
+  s_9749545b5cfef9::t_88acd039a885b0 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "58e1f3ea0edd09f2590bcc6b4030d00d95418686",
+  "prompts": {},
+  "sessions": {
+    "s_9749545b5cfef9": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0fb8d-b916-7b91-8599-a16e1c1833c7",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Javier Ferrer González <javier.ferrer@codely.com>"
+    }
+  }
+}
