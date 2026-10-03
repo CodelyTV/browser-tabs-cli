@@ -3,6 +3,9 @@
 version: 2
 updates:
   - package-ecosystem: "github-actions"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
     open-pull-requests-limit: 5
     directory: "/"
     schedule:
@@ -10,7 +13,6 @@ updates:
       day: "monday"
       time: "06:00"
       timezone: "Europe/Madrid"
-    # Add CodelyTV/dev as reviewers when the team has access to this repository.
     cooldown:
       default-days: 7
     groups:
@@ -20,6 +22,10 @@ updates:
 
   # Dependabot uses the npm ecosystem for pnpm manifests and lockfiles.
   - package-ecosystem: "npm"
+    commit-message:
+      prefix: "fix"
+      prefix-development: "build"
+      include: "scope"
     open-pull-requests-limit: 5
     directory: "/"
     versioning-strategy: "increase"
