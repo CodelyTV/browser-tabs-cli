@@ -1,4 +1,24 @@
-# browser-tabs-cli
+<p align="center">
+  <a href="https://codely.com">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://codely.com/logo/codely_logo-dark.svg">
+      <source media="(prefers-color-scheme: light)" srcset="https://codely.com/logo/codely_logo-light.svg">
+      <img alt="Codely logo" src="https://codely.com/logo/codely_logo.svg">
+    </picture>
+  </a>
+</p>
+
+<h1 align="center">browser-tabs-cli</h1>
+
+<p align="center">
+  <a href="https://github.com/CodelyTV"><img alt="Codely OS" src="https://img.shields.io/badge/Codely-OS-green?style=flat-square"></a>
+  <a href="https://codely.com/cafe"><img alt="Codely Cafe News" src="https://img.shields.io/badge/Codely-Cafe_News-%235A3E2B?style=flat-square"></a>
+  <a href="https://codely.com/newsletter"><img alt="Codely Newsletter" src="https://img.shields.io/badge/Codely-Newsletter-%23D3D3D3?style=flat-square"></a>
+  <a href="https://youtube.com/codelytv"><img alt="Codely YouTube" src="https://img.shields.io/badge/Codely-YouTube-red?style=flat-square"></a>
+  <a href="https://codely.com/courses"><img alt="Codely Courses" src="https://img.shields.io/badge/Codely-Courses-black?style=flat-square"></a>
+  <a href="https://github.com/CodelyTV/browser-tabs-cli/actions/workflows/ci.yml"><img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/codelytv/browser-tabs-cli/ci.yml?branch=main&amp;style=flat-square"></a>
+  <a href="https://github.com/CodelyTV/browser-tabs-cli/stargazers"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/codelytv/browser-tabs-cli"></a>
+</p>
 
 Open, name, and organize tabs in the browser window you already use. Import a
 JSON file to create native groups, set their colors, wait for pages to load, and
