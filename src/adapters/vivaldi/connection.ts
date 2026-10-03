@@ -19,8 +19,8 @@ export async function connectVivaldi(
     const { targetInfos } = await cdp.request<{
       targetInfos: { targetId: string; type: string; url: string }[];
     }>("Target.getTargets", { filter: [{}] });
-    for (const target of targetInfos.filter((target) =>
-      target.url.startsWith(origin),
+    for (const target of targetInfos.filter((candidate) =>
+      candidate.url.startsWith(origin),
     )) {
       let sessionId: string | undefined;
       try {

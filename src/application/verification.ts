@@ -100,21 +100,22 @@ export async function waitForBatch(
   }
   return result;
 }
+function stableTabState(tab: Tab) {
+  return JSON.stringify({
+    url: tab.url,
+    name: tab.name,
+    group: tab.group,
+    pinned: tab.pinned,
+    ownership: tab.ownership,
+  });
+}
 export function assertPreserved(before: Tab[], after: Tab[], batchId: string) {
-  const stable = (tab: Tab) =>
-    JSON.stringify({
-      url: tab.url,
-      name: tab.name,
-      group: tab.group,
-      pinned: tab.pinned,
-      ownership: tab.ownership,
-    });
   for (const original of before) {
     const current = after.find((tab) => tab.id === original.id);
     if (
       !current ||
       (original.ownership?.batchId !== batchId &&
-        stable(original) !== stable(current))
+        stableTabState(original) !== stableTabState(current))
     )
       throw new Error(
         `Pre-existing tab ${original.id} changed or disappeared. Inspect the window before retrying.`,

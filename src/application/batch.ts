@@ -101,7 +101,7 @@ export class BatchService {
   private checkExisting(plan: Plan, tabs: Tab[]) {
     const existing = new Map<string, Tab>();
     for (const tab of tabs.filter(
-      (tab) => tab.ownership?.batchId === plan.batchId,
+      (candidate) => candidate.ownership?.batchId === plan.batchId,
     )) {
       const key = tab.ownership!.key;
       const wanted = plan.tabs.find((item) => item.key === key);

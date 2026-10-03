@@ -3,6 +3,7 @@
 # Corepack and CI install the pinned version; keep the lockfile readable by Dependabot.
 # https://github.com/dependabot/dependabot-core/issues/15904
 pmOnFail: ignore
+engineStrict: true
 
 minimumReleaseAge: 10080 # 7 days, matching Codely.
 minimumReleaseAgeStrict: true
@@ -20,8 +21,3 @@ audit:
 
 allowBuilds:
   esbuild: true
-
-overrides:
-  # Node 22 types pin an older undici-types release without provenance.
-  # Stay on the same major while satisfying Codely's no-downgrade policy.
-  "@types/node>undici-types": ^6.29.0

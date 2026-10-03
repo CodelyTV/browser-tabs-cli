@@ -96,7 +96,7 @@ export class FakeNative implements NativeApi {
     ) => {
       this.mutations.push("properties");
       for (const tab of this.rows.filter(
-        (tab) => metadata(tab).group === options.groupExtId,
+        (candidate) => metadata(candidate).group === options.groupExtId,
       ))
         this.patch(tab.id, {
           ...(options.groupTitle === undefined
@@ -109,7 +109,7 @@ export class FakeNative implements NativeApi {
     },
   };
   row(id: number) {
-    const tab = this.rows.find((tab) => tab.id === id);
+    const tab = this.rows.find((candidate) => candidate.id === id);
     if (!tab) throw new Error(`Unknown tab ${id}`);
     return tab;
   }

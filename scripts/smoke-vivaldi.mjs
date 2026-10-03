@@ -69,7 +69,7 @@ const stable = (tabs) =>
       pinned,
       ownership,
     }))
-    .sort((a, b) => a.id - b.id);
+    .toSorted((a, b) => a.id - b.id);
 try {
   const file = join(directory, "plan.json");
   await writeFile(file, JSON.stringify(plan));

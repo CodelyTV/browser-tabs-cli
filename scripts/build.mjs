@@ -8,7 +8,7 @@ await build({
   packages: "external",
   platform: "node",
   format: "esm",
-  target: "node22",
+  target: "node24",
   banner: { js: "#!/usr/bin/env node" },
 });
 await build({

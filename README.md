@@ -10,7 +10,7 @@ when applying a batch. This is a new, independent TypeScript project.
 
 ## Getting started
 
-1. Install **Node.js 22 or later**, Git, Vivaldi, and
+1. Install **Node.js 24.x**, Git, Vivaldi, and
    [pnpm](https://pnpm.io/installation). This project pins **pnpm 12.4.1**,
    matching Codely. You need access to this private GitHub repository. Clone it using your configured GitHub SSH key:
 
@@ -281,16 +281,22 @@ pnpm check
 pnpm dev --help
 ```
 
-`check` runs strict TypeScript checks, builds both runtimes, runs the tests, and
-checks formatting. Use pnpm for installs and scripts; `pnpm-lock.yaml` is the
+`check` runs Oxlint, strict TypeScript checks, builds both runtimes, runs the
+tests, and checks formatting with Oxfmt. Oxlint warnings fail the check.
+Use pnpm for installs and scripts; `pnpm-lock.yaml` is the
 only dependency lockfile. `pnpm-workspace.yaml` carries the applicable Codely
 policies, including a seven-day minimum release age and explicit build permission
 for esbuild. Tests use Node's built-in runner, fake native APIs, and a local
 CDP WebSocket server that executes the actual built runtime. They need no installed
-browser and perform no external navigation. CI runs on Node 22 and 24.
+browser and perform no external navigation. CI runs only on Node 24.
+The Node requirement is enforced during installation;
+`nvm use` selects the version from `.nvmrc`.
 
 ```sh
-pnpm format
+pnpm lint       # Check JavaScript and TypeScript with Oxlint
+pnpm lint:fix   # Apply automatic lint fixes
+pnpm format     # Format supported files with Oxfmt
+pnpm format:check
 pnpm build
 BROWSER_TABS_CDP=9222 pnpm smoke:vivaldi
 ```
