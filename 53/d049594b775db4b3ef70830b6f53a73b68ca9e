@@ -1,0 +1,16 @@
+.github/workflows/ci.yml
+  h_e75e968c274758 48-49
+CONTRIBUTING.md
+  h_e75e968c274758 104,111-120
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "53d049594b775db4b3ef70830b6f53a73b68ca9e",
+  "prompts": {},
+  "humans": {
+    "h_e75e968c274758": {
+      "author": "Javier Ferrer González <javier.ferrer@codely.com>"
+    }
+  }
+}
