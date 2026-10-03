@@ -1,0 +1,16 @@
+.github/workflows/check.yml
+  h_e75e968c274758 12-13
+package.json
+  h_e75e968c274758 27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "67b37f2b08e9b3fd08e8f4ad9ab170bc595b4418",
+  "prompts": {},
+  "humans": {
+    "h_e75e968c274758": {
+      "author": "Javier Ferrer González <javier.ferrer@codely.com>"
+    }
+  }
+}
