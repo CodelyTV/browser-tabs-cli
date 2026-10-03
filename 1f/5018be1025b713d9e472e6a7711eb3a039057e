@@ -1,0 +1,18 @@
+package.json
+  h_e75e968c274758 51
+pnpm-lock.yaml
+  h_e75e968c274758 43-44,968-971,2723-2726
+tests/release.test.mjs
+  h_e75e968c274758 4-5,32-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "1f5018be1025b713d9e472e6a7711eb3a039057e",
+  "prompts": {},
+  "humans": {
+    "h_e75e968c274758": {
+      "author": "Javier Ferrer González <javier.ferrer@codely.com>"
+    }
+  }
+}
