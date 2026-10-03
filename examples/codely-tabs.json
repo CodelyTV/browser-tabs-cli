@@ -1,0 +1,35 @@
+{
+  "$schema": "../schemas/tab-batch.schema.json",
+  "version": 1,
+  "batchId": "codely-demo-001",
+  "tabs": [
+    {
+      "key": "home",
+      "url": "https://codely.com/",
+      "name": "Codely Home",
+      "groupKey": "learning"
+    },
+    {
+      "key": "courses",
+      "url": "https://codely.com/en/courses",
+      "name": "Codely Courses",
+      "groupKey": "learning"
+    },
+    {
+      "key": "typescript",
+      "url": "https://github.com/CodelyTV/typescript-ddd-example",
+      "name": "TypeScript DDD",
+      "groupKey": "examples"
+    },
+    {
+      "key": "php",
+      "url": "https://github.com/CodelyTV/php-ddd-example",
+      "name": "PHP DDD",
+      "groupKey": "examples"
+    }
+  ],
+  "groups": [
+    { "key": "learning", "title": "Codely Learning", "color": "yellow" },
+    { "key": "examples", "title": "Codely Examples", "color": "blue" }
+  ]
+}

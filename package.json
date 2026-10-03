@@ -1,0 +1,48 @@
+{
+  "name": "browser-tabs-cli",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Open and organize tabs in the browser window you already use",
+  "type": "module",
+  "bin": {
+    "browser-tabs-cli": "dist/main.js"
+  },
+  "files": [
+    "dist",
+    "schemas",
+    "examples",
+    "README.md",
+    "docs"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodelyTV/browser-tabs-cli.git"
+  },
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "tsx src/cli/main.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node --import tsx --test tests/*.test.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run typecheck && npm test && npm run format:check",
+    "smoke:vivaldi": "node scripts/smoke-vivaldi.mjs"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/ws": "^8.5.13",
+    "esbuild": "^0.25.0",
+    "prettier": "^3.0.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.0.0",
+    "ws": "^8.0.0"
+  }
+}
