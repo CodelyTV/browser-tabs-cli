@@ -45,7 +45,7 @@ Wait for the window, then run:
 
 ```sh
 browser-tabs-cli doctor
-npm run smoke:vivaldi
+pnpm smoke:vivaldi
 ```
 
 Complete or dismiss onboarding to inspect native stacks visually. Close only the

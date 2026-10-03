@@ -10,8 +10,9 @@ when applying a batch. This is a new, independent TypeScript project.
 
 ## Getting started
 
-1. Install **Node.js 22 or later**, Git, and Vivaldi. You need access to this
-   private GitHub repository. Clone it using your configured GitHub SSH key:
+1. Install **Node.js 22 or later**, Git, Vivaldi, and
+   [pnpm](https://pnpm.io/installation). This project pins **pnpm 12.4.1**,
+   matching Codely. You need access to this private GitHub repository. Clone it using your configured GitHub SSH key:
 
    ```sh
    git clone git@github.com:CodelyTV/browser-tabs-cli.git
@@ -21,14 +22,15 @@ when applying a batch. This is a new, independent TypeScript project.
 2. Install the dependencies, build, and make the command available in your terminal:
 
    ```sh
-   npm ci
-   npm run build
-   npm link
+   pnpm install --frozen-lockfile
+   pnpm build
+   pnpm add -g .
    browser-tabs-cli --help
    ```
 
-   Alternatively, use `node dist/main.js` instead of `browser-tabs-cli`. After
-   pulling updates, run `npm ci` and `npm run build` again.
+   If pnpm reports a missing global binary directory, run `pnpm setup`, restart
+   your terminal and retry `pnpm add -g .`. Alternatively, use `node dist/main.js`
+   instead of `browser-tabs-cli`. After pulling updates, run `pnpm install --frozen-lockfile` and `pnpm build` again.
 
 3. Connect the browser once. **CDP** means **Chrome DevTools Protocol**: a debugging
    protocol that lets local tools communicate with Chromium-based browsers.
@@ -38,7 +40,7 @@ when applying a batch. This is a new, independent TypeScript project.
    Your Vivaldi instance must expose a local debugging endpoint and its privileged
    UI. See [Vivaldi connection setup](docs/vivaldi.md) for the tested setup and the
    limitation of enabling debugging in an existing personal session. This is a
-   prerequisite, not something `npm link` configures.
+   prerequisite, not something `pnpm add -g .` configures.
 
    ```sh
    browser-tabs-cli doctor
@@ -274,24 +276,41 @@ assessment of integration risk.
 ## Development and tests
 
 ```sh
-npm ci
-npm run check
-npm run dev -- --help
+pnpm install --frozen-lockfile
+pnpm check
+pnpm dev --help
 ```
 
 `check` runs strict TypeScript checks, builds both runtimes, runs the tests, and
-checks formatting. Tests use Node's built-in runner, fake native APIs, and a local
+checks formatting. Use pnpm for installs and scripts; `pnpm-lock.yaml` is the
+only dependency lockfile. `pnpm-workspace.yaml` carries the applicable Codely
+policies, including a seven-day minimum release age and explicit build permission
+for esbuild. Tests use Node's built-in runner, fake native APIs, and a local
 CDP WebSocket server that executes the actual built runtime. They need no installed
 browser and perform no external navigation. CI runs on Node 22 and 24.
 
 ```sh
-npm run format
-npm run build
-BROWSER_TABS_CDP=9222 npm run smoke:vivaldi
+pnpm format
+pnpm build
+BROWSER_TABS_CDP=9222 pnpm smoke:vivaldi
 ```
 
 The opt-in smoke test uses an already configured Vivaldi instance, creates eight
 local pages in four colored stacks, replays the batch, exercises unit commands,
 and cleans up only its own tabs. It checks the original inventory after cleanup.
-With several windows, use `npm run smoke:vivaldi -- 123`. Prefer a disposable
+With several windows, use `pnpm smoke:vivaldi 123`. Prefer a disposable
 profile for adapter development; see [the Vivaldi guide](docs/vivaldi.md).
+
+## Dependency updates
+
+Dependabot follows Codely's policy for pnpm packages and GitHub Actions: weekly
+checks on Monday at 06:00 Europe/Madrid, up to five open PRs per ecosystem,
+a seven-day cooldown, and a 30-day cooldown for major package updates. Minor and
+patch package updates are grouped separately for production and development;
+major updates stay separate. GitHub Actions updates share one group. Major
+`@types/node` updates are ignored until the supported Node version changes.
+Dependabot calls the pnpm ecosystem `npm`; it updates `pnpm-lock.yaml`.
+
+The `CodelyTV/dev` reviewer assignment from Codely's configuration is omitted
+until that team has access to this private repository. No repository permissions
+are changed by this configuration.
