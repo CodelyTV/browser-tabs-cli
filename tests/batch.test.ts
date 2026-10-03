@@ -16,7 +16,7 @@ test("batch opens every URL before names and groups, preserving an existing lock
   });
   api.lockedStack = true;
   const before = await browser.tabs(1);
-  const result = await new BatchService(browser).apply(plan, 0);
+  const result = await new BatchService(browser).open(plan, 0);
   assert.equal(result.verified, true);
   assert.equal(result.ready, true);
   assert.equal(result.created, 3);
@@ -43,12 +43,12 @@ test("identical retries reuse only owned tabs, including after a partial failure
   api.rows[0]!.url = plan.tabs[0]!.url;
   const service = new BatchService(browser);
   api.failOpenAt = 2;
-  await assert.rejects(service.apply(plan, 0), /Simulated/);
+  await assert.rejects(service.open(plan, 0), /Simulated/);
   api.failOpenAt = 0;
-  const resumed = await service.apply(plan, 0);
+  const resumed = await service.open(plan, 0);
   assert.equal(resumed.created, 2);
   assert.equal(resumed.reused, 1);
-  const again = await service.apply(plan, 0);
+  const again = await service.open(plan, 0);
   assert.equal(again.created, 0);
   assert.equal(again.reused, 3);
   assert.equal(api.rows.length, 4);
@@ -57,7 +57,7 @@ test("ambiguous, missing, and invalid explicit windows fail before changes", asy
   const { api, browser } = fixture();
   api.openWindows.push({ id: 2, focused: false });
   await assert.rejects(
-    new BatchService(browser).apply(plan, 0),
+    new BatchService(browser).open(plan, 0),
     /multiple|Several|More than|window/i,
   );
   assert.equal(await selectWindow(browser, 2), 2);
@@ -70,11 +70,11 @@ test("adapter limits are checked before opening anything", async () => {
   const { api, browser } = fixture();
   const service = new BatchService(browser);
   await assert.rejects(
-    service.apply({ ...plan, tabs: [plan.tabs[0]!] }, 0),
+    service.open({ ...plan, tabs: [plan.tabs[0]!] }, 0),
     /at least 2/,
   );
   await assert.rejects(
-    service.apply(
+    service.open(
       {
         ...plan,
         tabs: plan.tabs.map((tab) => ({ ...tab, name: "x".repeat(51) })),
@@ -88,10 +88,10 @@ test("adapter limits are checked before opening anything", async () => {
 test("a changed source URL or ownership collision is rejected before changes", async () => {
   const { api, browser } = fixture();
   const service = new BatchService(browser);
-  await service.apply(plan, 0);
+  await service.open(plan, 0);
   const count = api.mutations.length;
   await assert.rejects(
-    service.apply(
+    service.open(
       {
         ...plan,
         tabs: plan.tabs.map((tab) => ({
@@ -104,18 +104,18 @@ test("a changed source URL or ownership collision is rejected before changes", a
     /does not match/,
   );
   api.rows.push({ ...api.rows[0]!, id: 99 });
-  await assert.rejects(service.apply(plan, 0), /Duplicate/);
+  await assert.rejects(service.open(plan, 0), /Duplicate/);
   assert.equal(api.mutations.length, count);
 });
 test("foreign stack members prevent retries from modifying personal tabs", async () => {
   const { api, browser } = fixture();
   const service = new BatchService(browser);
-  await service.apply(plan, 0);
+  await service.open(plan, 0);
   const id = api.seed();
   const group = (await browser.tabs(1))[0]!.group!.id;
   api.patch(id, { group });
   const count = api.mutations.length;
-  await assert.rejects(service.apply(plan, 0), /unrelated/);
+  await assert.rejects(service.open(plan, 0), /unrelated/);
   assert.equal(api.mutations.length, count);
   const verification = await service.verify(plan, 0);
   assert.equal(verification.verified, false);
@@ -123,7 +123,7 @@ test("foreign stack members prevent retries from modifying personal tabs", async
 test("verification detects incorrect names, split groups and colors", async () => {
   const { api, browser } = fixture();
   const service = new BatchService(browser);
-  await service.apply(plan, 0);
+  await service.open(plan, 0);
   api.patch(api.rows[0]!.id, {
     fixedTitle: "Wrong name",
     groupColor: "color2",
@@ -139,7 +139,7 @@ test("loading is separate from structural correctness and can be polled without 
   const { api, browser } = fixture();
   api.loading = true;
   const service = new BatchService(browser);
-  const result = await service.apply(plan, 0);
+  const result = await service.open(plan, 0);
   assert.equal(result.verified, true);
   assert.equal(result.ready, false);
   const count = api.mutations.length;
@@ -152,7 +152,7 @@ test("loading is separate from structural correctness and can be polled without 
 test("batch close removes only its own tabs", async () => {
   const { api, browser } = fixture();
   const personal = api.seed();
-  await new BatchService(browser).apply(plan, 0);
+  await new BatchService(browser).open(plan, 0);
   await execute(browser, { type: "batch.close", batchId: plan.batchId });
   assert.deepEqual(
     api.rows.map((tab) => tab.id),

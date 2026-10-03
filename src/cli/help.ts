@@ -13,7 +13,7 @@ export const help = `browser-tabs [--browser vivaldi] [--cdp auto|port|url] <com
   group color ID COLOR [--window ID]
   group move ID --tabs ID,ID [--window ID]
   batch validate FILE                           Validate JSON without a browser
-  batch apply FILE [--wait 30] [--window ID]      Open, name, group, wait, and verify
+  batch open FILE [--wait 30] [--window ID]      Open, name, group, wait, and verify
   batch verify FILE [--wait 0] [--window ID]
   batch close ID [--window ID]
 

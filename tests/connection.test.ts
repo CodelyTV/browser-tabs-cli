@@ -87,7 +87,7 @@ test("the compiled runtime applies and verifies a batch with one execution over 
     );
     try {
       const result = (await connection.execute({
-        type: "batch.apply",
+        type: "batch.open",
         plan,
         waitMs: 0,
       })) as { verified: boolean; created: number };

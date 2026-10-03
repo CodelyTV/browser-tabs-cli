@@ -73,14 +73,14 @@ const stable = (tabs) =>
 try {
   const file = join(directory, "plan.json");
   await writeFile(file, JSON.stringify(plan));
-  const first = await run("batch", "apply", file, "--wait", "15");
+  const first = await run("batch", "open", file, "--wait", "15");
   plan.windowId = first.data.windowId;
   cleanupTarget = ["--window", String(plan.windowId)];
   await writeFile(file, JSON.stringify(plan));
   assert.equal(first.data.created, 8);
   assert.equal(first.data.ready, true);
   assert.equal(first.data.groups.length, 4);
-  const retry = await run("batch", "apply", file, "--wait", "15");
+  const retry = await run("batch", "open", file, "--wait", "15");
   assert.equal(retry.data.created, 0);
   assert.equal(retry.data.reused, 8);
   const opened = await run(
@@ -132,7 +132,7 @@ try {
     groups.find((item) => item.id === group.data.id).tabIds.length,
     3,
   );
-  await run("batch", "apply", file, "--wait", "15").then(
+  await run("batch", "open", file, "--wait", "15").then(
     () => {
       throw new Error("Expected foreign-member conflict");
     },

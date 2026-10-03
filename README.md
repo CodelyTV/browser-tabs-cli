@@ -95,7 +95,7 @@ when applying a batch.
    native stacks and verifies them in the same command:
 
    ```sh
-   browser-tabs batch apply tab-batch-schema/example.json --wait 60
+   browser-tabs batch open tab-batch-schema/example.json --wait 60
    ```
 
    Keep the JSON response. `data.verified` confirms names, exact group membership,
@@ -124,12 +124,12 @@ which a retry of the original plan can complete. Batches are not transactions.
 
 ```sh
 browser-tabs batch validate tab-batch-schema/example.json
-browser-tabs batch apply tab-batch-schema/example.json --wait 60
+browser-tabs batch open tab-batch-schema/example.json --wait 60
 browser-tabs batch verify tab-batch-schema/example.json --wait 60
 browser-tabs batch close codely-example
 ```
 
-`validate` is entirely local. `apply` already verifies; call `verify` only to check
+`validate` is entirely local. `open` already verifies; call `verify` only to check
 later or wait again for unfinished pages. `close` explicitly closes only tabs
 owned by that batch. Review their contents first if you have since used them for
 other work.
@@ -159,7 +159,7 @@ from the JSON returned by `windows`, `tab list`, or `group list`.
 | `group color ID COLOR [--window ID]`                                                  | Change a stack color                                                       |
 | `group move ID --tabs ID,ID [--window ID]`                                            | Move selected tabs into the target stack                                   |
 | `batch validate FILE`                                                                 | Validate an import without connecting to a browser                         |
-| `batch apply FILE [--wait SECONDS] [--window ID]`                                     | Open all tabs, name, group, color, wait, and verify                        |
+| `batch open FILE [--wait SECONDS] [--window ID]`                                     | Open all tabs, name, group, color, wait, and verify                        |
 | `batch verify FILE [--wait SECONDS] [--window ID]`                                    | Read and verify an existing batch                                          |
 | `batch close ID [--window ID]`                                                        | Close tabs tagged with the given batch ID                                  |
 
@@ -174,7 +174,7 @@ Global options: `--help`, `--browser vivaldi`, `--cdp auto|PORT|URL`.
 endpoint discovery. Only loopback HTTP and WebSocket endpoints are accepted.
 `--window` cannot conflict with a JSON `windowId`.
 
-`--wait` accepts 0 to 300 seconds. The defaults are 30 for `apply` and `group open`,
+`--wait` accepts 0 to 300 seconds. The defaults are 30 for `open` and `group open`,
 and 0 for `verify`. The CLI returns JSON with `ok`, `data`, and `elapsedMs`, or
 `ok: false` and `error`. Exit codes:
 

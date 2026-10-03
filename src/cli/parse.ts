@@ -157,11 +157,11 @@ export function parse(argv: string[]): Input {
             },
           ],
         });
-        command = { type: "batch.apply", plan, waitMs: waitMs(30) };
+        command = { type: "batch.open", plan, waitMs: waitMs(30) };
         break;
       }
       case "batch validate":
-      case "batch apply":
+      case "batch open":
       case "batch verify": {
         const local = words[1] === "validate";
         check(1, local ? [] : ["window", "wait"]);
@@ -174,9 +174,9 @@ export function parse(argv: string[]): Input {
         )
           throw new Error("--window conflicts with windowId in the JSON.");
         command = {
-          type: words[1] === "apply" ? "batch.apply" : "batch.verify",
+          type: words[1] === "open" ? "batch.open" : "batch.verify",
           plan: { ...plan, ...target },
-          waitMs: waitMs(words[1] === "apply" ? 30 : 0),
+          waitMs: waitMs(words[1] === "open" ? 30 : 0),
         };
         break;
       }

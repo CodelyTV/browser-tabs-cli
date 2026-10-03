@@ -7,8 +7,8 @@ export async function execute(
   command: Command,
 ): Promise<unknown> {
   if (command.type === "windows") return browser.windows();
-  if (command.type === "batch.apply")
-    return new BatchService(browser).apply(command.plan, command.waitMs);
+  if (command.type === "batch.open")
+    return new BatchService(browser).open(command.plan, command.waitMs);
   if (command.type === "batch.verify")
     return new BatchService(browser).verify(command.plan, command.waitMs);
   const windowId = await selectWindow(browser, command.windowId);

@@ -4,7 +4,7 @@ import { selectWindow } from "./window.js";
 import { assertPreserved, waitForBatch } from "./verification.js";
 export class BatchService {
   constructor(private readonly browser: Browser) {}
-  async apply(input: Plan, waitMs: number) {
+  async open(input: Plan, waitMs: number) {
     this.checkLimits(input);
     const plan = {
       ...input,

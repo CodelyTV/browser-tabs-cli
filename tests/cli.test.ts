@@ -76,7 +76,7 @@ test("group open compiles to the same batch contract", () => {
     "stable-id",
   ]);
   assert.equal(input.kind, "execute");
-  if (input.kind !== "execute" || input.command.type !== "batch.apply") return;
+  if (input.kind !== "execute" || input.command.type !== "batch.open") return;
   assert.equal(input.command.plan.batchId, "stable-id");
   assert.equal(input.command.plan.tabs.length, 2);
   assert.equal(input.command.waitMs, 30_000);
@@ -101,11 +101,11 @@ test("batch validation is local and conflicting window overrides fail", async ()
     });
     assert.equal(result.exitCode, 0);
     assert.throws(
-      () => parse(["batch", "apply", file, "--window", "2"]),
+      () => parse(["batch", "open", file, "--window", "2"]),
       /conflicts/,
     );
     assert.throws(
-      () => parse(["batch", "apply", file, "--wait", "301"]),
+      () => parse(["batch", "open", file, "--wait", "301"]),
       /300/,
     );
   } finally {
