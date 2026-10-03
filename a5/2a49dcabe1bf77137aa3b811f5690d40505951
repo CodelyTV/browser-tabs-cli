@@ -1,0 +1,31 @@
+.nvmrc
+  s_9749545b5cfef9::t_8f7aaf99bbaf33 1
+.oxfmtrc.json
+  s_9749545b5cfef9::t_df0abafaa0df6f 1-6
+.oxlintrc.json
+  s_9749545b5cfef9::t_74e52d57f8d40e 1-12
+package.json
+  s_9749545b5cfef9::t_10e5d12073ee3e 18,30-35,42,45-46
+pnpm-lock.yaml
+  s_9749545b5cfef9::t_0b44ca5333a160 19-20,27-32,357-602,642-657,659-666,672-675,686-687,859-973,975,979,1059-1103,1107-1108,1117
+pnpm-workspace.yaml
+  s_9749545b5cfef9::t_2c93589bb65215 6
+scripts/build.mjs
+  s_9749545b5cfef9::t_3df1b831617296 11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "a52a49dcabe1bf77137aa3b811f5690d40505951",
+  "prompts": {},
+  "sessions": {
+    "s_9749545b5cfef9": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0fb8d-b916-7b91-8599-a16e1c1833c7",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Javier Ferrer González <javier.ferrer@codely.com>"
+    }
+  }
+}
