@@ -1,0 +1,14 @@
+.github/dependabot.yml
+  h_e75e968c274758 6-8,25-28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "21d4dff2b65250f5e085c95e8a8d49c019c38c04",
+  "prompts": {},
+  "humans": {
+    "h_e75e968c274758": {
+      "author": "Javier Ferrer González <javier.ferrer@codely.com>"
+    }
+  }
+}
