@@ -1,0 +1,16 @@
+README.md
+  h_e75e968c274758 94
+tab-batch-schema/example.json
+  h_e75e968c274758 101-106
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "e32728e187cba4ce503c750169070221e8ae743d",
+  "prompts": {},
+  "humans": {
+    "h_e75e968c274758": {
+      "author": "Javier Ferrer González <javier.ferrer@codely.com>"
+    }
+  }
+}
