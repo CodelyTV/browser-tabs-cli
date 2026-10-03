@@ -1,0 +1,15 @@
+README.md
+  h_e75e968c274758 140-183,225,233-234
+  h_e75e968c274758 138-139
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "74774d54c5f602f06468d18cac27215d48bca27c",
+  "prompts": {},
+  "humans": {
+    "h_e75e968c274758": {
+      "author": "Javier Ferrer González <javier.ferrer@codely.com>"
+    }
+  }
+}
