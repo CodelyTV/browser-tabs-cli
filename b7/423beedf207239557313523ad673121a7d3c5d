@@ -1,0 +1,18 @@
+CONTRIBUTING.md
+  h_e75e968c274758 1-130
+README.md
+  h_e75e968c274758 226-241
+package.json
+  h_e75e968c274758 13-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "b7423beedf207239557313523ad673121a7d3c5d",
+  "prompts": {},
+  "humans": {
+    "h_e75e968c274758": {
+      "author": "Javier Ferrer González <javier.ferrer@codely.com>"
+    }
+  }
+}
