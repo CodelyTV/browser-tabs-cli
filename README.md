@@ -30,28 +30,36 @@ when applying a batch.
 
 ## Getting started
 
-1. Install **Node.js 24.x**, Git, Vivaldi, and
-   [pnpm](https://pnpm.io/installation). This project pins **pnpm 12.4.1**.
-   Clone it using your configured GitHub SSH key:
+1. Install **Node.js 24.x**, Vivaldi, and [pnpm](https://pnpm.io/installation).
+
+2. Choose one installation method:
+
+   **Install the published package globally:**
 
    ```sh
-   git clone git@github.com:CodelyTV/browser-tabs-cli.git
-   cd browser-tabs-cli
+   pnpm add -g browser-tabs-cli
+   browser-tabs --help
    ```
 
-2. Install the dependencies, build, and make the command available in your terminal:
+   Update it later with `pnpm update -g browser-tabs-cli`.
+
+   **Or clone and build from source:**
 
    ```sh
+   git clone https://github.com/CodelyTV/browser-tabs-cli.git
+   cd browser-tabs-cli
    pnpm install --frozen-lockfile
    pnpm build
    pnpm add -g .
    browser-tabs --help
    ```
 
+   Source builds pin **pnpm 12.4.1**. After pulling updates, repeat the install,
+   build, and global installation commands. You can also run `node dist/main.js`
+   from the checkout.
+
    If pnpm reports a missing global binary directory, run `pnpm setup`, restart
-   your terminal and retry `pnpm add -g .`. Alternatively, use `node dist/main.js`
-   instead of `browser-tabs`. After pulling updates, run `pnpm install --frozen-lockfile`, `pnpm build`, and `pnpm add -g .` again
-   to refresh the installed command.
+   your terminal, and retry the global installation.
 
 3. Connect the browser once. **CDP** means **Chrome DevTools Protocol**: a debugging
    protocol that lets local tools communicate with Chromium-based browsers.
@@ -90,7 +98,9 @@ when applying a batch.
    browser-tabs tab rename 123 "Codely courses"
    ```
 
-5. Import the included example. This creates 17 named tabs in three colored
+5. Download the [example JSON](tab-batch-schema/example.json), or use the copy
+   included in the clone. The commands below assume you saved it as
+   `tab-batch-schema/example.json`. Open it with one command. This creates 17 named tabs in three colored
    native stacks:
 
    ```sh
@@ -323,3 +333,37 @@ patch package updates are grouped separately for production and development;
 major updates stay separate. GitHub Actions updates share one group. Major
 `@types/node` updates are ignored until the supported Node version changes.
 Dependabot calls the pnpm ecosystem `npm`; it updates `pnpm-lock.yaml`.
+
+## Releases and npm publishing
+
+Every successful CI run for a new commit on `main` uses
+[semantic-release](https://semantic-release.org/) to publish an npm package and a
+GitHub release with provenance. It considers all commits since the previous tag:
+`feat` increments the minor version, breaking changes increment the major version,
+and other Conventional Commit types increment the patch version. The largest
+change wins. This includes documentation and dependency updates. Re-running CI
+without new commits does not publish another version. The first release is 1.0.0.
+
+Release tags and npm are the version source of truth; the checkout keeps its
+development version. CI sets the package version before publishing without a
+release commit or release PR. Builds and dependency installation use pnpm;
+semantic-release uses npm only for registry publication.
+
+### One-time npm setup
+
+1. For a new package, create a short-lived
+   [npm granular access token](https://docs.npmjs.com/creating-and-viewing-access-tokens/)
+   with permission to create and publish the package and **Bypass 2FA** enabled.
+   Store it as the repository Actions secret `NPM_TOKEN`, then run the **CI**
+   workflow on `main`. This first publication also includes provenance.
+2. In the package's npm settings, add a
+   [GitHub Actions trusted publisher](https://docs.npmjs.com/trusted-publishers/):
+   organization **CodelyTV**, repository **browser-tabs-cli**, workflow filename
+   **ci.yml**, and no environment name. Allow direct **npm publish**.
+3. Delete the GitHub `NPM_TOKEN` secret and revoke the temporary npm token.
+   Subsequent releases authenticate through GitHub OIDC, without an npm secret.
+   Node 24 supplies the required modern npm CLI; the workflow grants `id-token: write`.
+
+Until the initial npm authorization is configured, CI can validate the project
+but its release job cannot publish. Use **Run workflow** after setup to retry
+without creating an empty commit. Never put npm tokens in Git, commands, or chat.

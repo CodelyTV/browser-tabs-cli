@@ -1,7 +1,6 @@
 {
   "name": "browser-tabs-cli",
   "version": "0.1.0",
-  "private": true,
   "description": "Open and organize tabs in the browser window you already use",
   "type": "module",
   "bin": {
@@ -25,27 +24,41 @@
     "build": "node scripts/build.mjs",
     "dev": "pnpm build && node dist/main.js",
     "typecheck": "tsc --noEmit",
-    "test": "pnpm build && node --import tsx --test tests/*.test.ts",
+    "test": "pnpm build && node --import tsx --test tests/*.test.ts tests/*.test.mjs",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm format:check",
     "smoke:vivaldi": "node scripts/smoke-vivaldi.mjs",
     "lint": "oxlint --deny-warnings .",
-    "lint:fix": "oxlint --fix ."
+    "lint:fix": "oxlint --fix .",
+    "prepack": "pnpm build",
+    "release": "semantic-release"
   },
   "dependencies": {
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/github": "^12.0.10",
+    "@semantic-release/npm": "^13.2.0",
+    "@semantic-release/release-notes-generator": "^14.1.1",
     "@types/node": "^24.0.0",
     "@types/ws": "^8.5.13",
+    "conventional-changelog-conventionalcommits": "^8.0.0",
     "esbuild": "^0.28.2",
     "oxfmt": "0.70.0",
     "oxlint": "^1.79.0",
+    "semantic-release": "^25.0.9",
     "tsx": "^4.21.0",
     "typescript": "^7.0.2",
     "ws": "^8.0.0"
   },
-  "packageManager": "pnpm@12.4.1+sha512.2e81e399d73fe8390dab25e06aa788ab7a5908248d2f5a370f82b481147a6a7a367bf8048f9a6fdb6460f21a66f0542dedb8b94ca2c8723596741920b1656d4c"
+  "packageManager": "pnpm@12.4.1+sha512.2e81e399d73fe8390dab25e06aa788ab7a5908248d2f5a370f82b481147a6a7a367bf8048f9a6fdb6460f21a66f0542dedb8b94ca2c8723596741920b1656d4c",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
 }
