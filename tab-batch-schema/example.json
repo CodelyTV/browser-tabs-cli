@@ -98,6 +98,12 @@
       "url": "https://github.com/CodelyTV/bash-github_actions-skeleton",
       "name": "Bash Actions Skeleton",
       "groupKey": "open-source"
+    },
+    {
+      "key": "typescript-primitives-type",
+      "url": "https://github.com/CodelyTV/typescript-primitives-type",
+      "name": "TypeScript Primitives",
+      "groupKey": "open-source"
     }
   ],
   "groups": [

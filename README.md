@@ -91,7 +91,7 @@ when applying a batch.
    browser-tabs tab rename 123 "Codely courses"
    ```
 
-5. Import the included example. This creates 16 named tabs in three colored
+5. Import the included example. This creates 17 named tabs in three colored
    native stacks and verifies them in the same command:
 
    ```sh
