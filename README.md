@@ -107,8 +107,8 @@ when applying a batch.
 The authoritative format is [tab-batch-schema/schema.json](tab-batch-schema/schema.json).
 The CLI validates against that same schema, then checks key uniqueness and group
 references. [tab-batch-schema/example.json](tab-batch-schema/example.json) is a complete,
-ready-to-run example. Private GitHub schema URLs require authentication;
-editors can use the local schema path instead.
+ready-to-run example. Both files are publicly available; editors can also use
+the local schema path.
 
 `windowId` is optional. A tab without `groupKey` remains at the top level. `name`
 and group `color` are optional. Vivaldi requires at least two unpinned tabs per
@@ -121,18 +121,35 @@ tab with the same URL is never adopted. Do not change URLs under existing keys;
 use a new batch ID for a new selection. A failed operation can leave partial work,
 which a retry of the original plan can complete. Batches are not transactions.
 
-```sh
-browser-tabs batch validate tab-batch-schema/example.json
-browser-tabs batch open tab-batch-schema/example.json
-browser-tabs batch verify tab-batch-schema/example.json --verify-after-seconds 30
-browser-tabs batch close codely-example
-```
+- Validate the JSON locally without connecting to the browser:
 
-`validate` is entirely local. `open` skips post-open verification unless
-`--verify-after-seconds` is supplied. `verify` explicitly checks an existing batch
-immediately, or after the supplied delay. `close` explicitly closes only tabs
-owned by that batch. Review their contents first if you have since used them for
-other work.
+  ```sh
+  browser-tabs batch validate tab-batch-schema/example.json
+  ```
+
+- Open, name, and group all tabs without waiting for page loads or running post-open verification:
+
+  ```sh
+  browser-tabs batch open tab-batch-schema/example.json
+  ```
+
+- Open the batch, wait 30 seconds after organizing it, and verify names, membership, colors, and loading:
+
+  ```sh
+  browser-tabs batch open tab-batch-schema/example.json --verify-after-seconds 30
+  ```
+
+- Verify an existing batch immediately without opening more tabs:
+
+  ```sh
+  browser-tabs batch verify tab-batch-schema/example.json
+  ```
+
+- Close only tabs owned by this batch. Review their contents first if you have since used them for other work:
+
+  ```sh
+  browser-tabs batch close codely-example
+  ```
 
 The CLI preserves URLs exactly. URL cleanup, deduplication, source selection,
 short-name policies, and decisions about which tabs belong together belong to
