@@ -43,6 +43,15 @@ updates:
       # Keep Node types aligned with the minimum supported Node version.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+
+      # v10 requires conventional-changelog-writer >=9, while the semantic-release
+      # plugins we use still depend on writer ^8. Remove this ignore once both
+      # packages below use conventional-changelog-writer >=9, then verify that
+      # tests/release.test.mjs passes with the v10 preset:
+      # https://github.com/semantic-release/release-notes-generator/blob/master/package.json
+      # https://github.com/semantic-release/commit-analyzer/blob/master/package.json
+      - dependency-name: "conventional-changelog-conventionalcommits"
+        versions: ["10.x"]
     groups:
       development-minor-patch:
         dependency-type: "development"
