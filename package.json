@@ -48,7 +48,7 @@
     "@semantic-release/release-notes-generator": "^14.1.1",
     "@types/node": "^24.0.0",
     "@types/ws": "^8.5.13",
-    "conventional-changelog-conventionalcommits": "^8.0.0",
+    "conventional-changelog-conventionalcommits": "^10.4.0",
     "esbuild": "^0.28.2",
     "oxfmt": "0.70.0",
     "oxlint": "^1.79.0",
