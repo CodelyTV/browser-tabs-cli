@@ -42,7 +42,11 @@ export interface GroupWithTabs extends Group {
   tabIds: number[];
 }
 export interface Browser {
-  readonly limits: { minGroupSize: number; maxTabNameLength?: number };
+  readonly limits: {
+    minGroupSize: number;
+    maxTabNameLength?: number;
+    tabNames?: boolean;
+  };
   windows(): Promise<BrowserWindow[]>;
   tabs(windowId: number): Promise<Tab[]>;
   open(windowId: number, url: string, ownership?: Ownership): Promise<Tab>;

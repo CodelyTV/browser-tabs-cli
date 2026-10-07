@@ -9,17 +9,28 @@ import { join } from "node:path";
 import { randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
 
+const browser = process.env.BROWSER_TABS_BROWSER ?? "vivaldi";
+const supportsNames = browser === "vivaldi";
+
 // Opt in explicitly. The script never launches or restarts a browser.
-if (!process.env.BROWSER_TABS_CDP && !process.env.BROWSER_TABS_VIVALDI_DATA_DIR)
+if (
+  !process.env.BROWSER_TABS_CDP &&
+  !process.env[`BROWSER_TABS_${browser.toUpperCase()}_DATA_DIR`] &&
+  !(browser !== "vivaldi" && process.env.BROWSER_TABS_DATA_DIR)
+)
   throw new Error(
-    "Set BROWSER_TABS_CDP or BROWSER_TABS_VIVALDI_DATA_DIR to the test browser first.",
+    "Set BROWSER_TABS_CDP or the selected browser data directory to the test browser first.",
   );
 const exec = promisify(execFile);
 const binary = fileURLToPath(new URL("../dist/main.js", import.meta.url));
 const run = async (...args) => {
-  const { stdout } = await exec(process.execPath, [binary, ...args], {
-    timeout: 90_000,
-  });
+  const { stdout } = await exec(
+    process.execPath,
+    [binary, "--browser", browser, ...args],
+    {
+      timeout: 90_000,
+    },
+  );
   const result = JSON.parse(stdout);
   assert.equal(result.ok, true);
   return result;
@@ -49,7 +60,7 @@ const plan = {
   tabs: Array.from({ length: 8 }, (_, index) => ({
     key: `tab-${index}`,
     url: `${base}/${index}`,
-    name: `Test page ${index}`,
+    ...(supportsNames ? { name: `Test page ${index}` } : {}),
     groupKey: `group-${Math.floor(index / 2)}`,
   })),
   groups: ["yellow", "blue", "green", "purple"].map((color, index) => ({
@@ -87,20 +98,20 @@ try {
     "tab",
     "open",
     `${base}/unit`,
-    "--name",
-    "Unit tab",
+    ...(supportsNames ? ["--name", "Unit tab"] : []),
     ...cleanupTarget,
   );
   extraIds.push(opened.data.id);
   const second = await run("tab", "open", `${base}/second`, ...cleanupTarget);
   extraIds.push(second.data.id);
-  await run(
-    "tab",
-    "rename",
-    String(second.data.id),
-    "Second tab",
-    ...cleanupTarget,
-  );
+  if (supportsNames)
+    await run(
+      "tab",
+      "rename",
+      String(second.data.id),
+      "Second tab",
+      ...cleanupTarget,
+    );
   const group = await run(
     "group",
     "create",
@@ -144,11 +155,14 @@ try {
     JSON.stringify(
       {
         passed: true,
+        browser,
         batchTabs: 8,
         batchGroups: 4,
         applyMs: first.elapsedMs,
         replayMs: retry.elapsedMs,
-        unitOperations: "open, rename, create, rename group, color, move, list",
+        unitOperations: supportsNames
+          ? "open, rename, create, rename group, color, move, list"
+          : "open, create, rename group, color, move, list",
       },
       null,
       2,

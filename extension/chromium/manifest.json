@@ -1,0 +1,8 @@
+{
+  "manifest_version": 3,
+  "name": "Browser Tabs CLI",
+  "version": "0.1.0",
+  "description": "Native tab and group operations for the local browser-tabs CLI.",
+  "permissions": ["tabs", "tabGroups", "storage"],
+  "options_page": "browser-tabs.html"
+}

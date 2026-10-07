@@ -29,6 +29,8 @@
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm format:check",
+    "smoke:cdp": "node scripts/smoke-cdp.mjs",
+    "smoke:chromium": "node scripts/smoke-chromium.mjs",
     "smoke:vivaldi": "node scripts/smoke-vivaldi.mjs",
     "lint": "oxlint --deny-warnings .",
     "lint:fix": "oxlint --fix .",

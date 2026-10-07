@@ -7,7 +7,8 @@ or a `BREAKING CHANGE:` footer. CI validates commit messages against Conventiona
 ## Architecture
 
 The TypeScript code separates a generic browser contract from Vivaldi's private
-APIs. The application layer owns batch sequencing, retries, and verification;
+APIs and standard Chromium extension APIs. The application layer owns batch
+sequencing, retries, and verification;
 it does not know how any browser stores groups.
 
 | Directory              | Responsibility                                                          |
@@ -21,11 +22,14 @@ it does not know how any browser stores groups.
 | `tab-batch-schema`     | Versioned JSON import contract used directly by runtime validation      |
 | `tests`                | Application, adapter, CLI, schema, and CDP integration tests            |
 
-The build produces a Node.js CLI and a browser runtime. Each command attaches
+The build produces a Node.js CLI, a Vivaldi browser runtime, and an unpacked
+Chromium extension in `dist/chromium-extension`. Each command attaches
 once, probes the privileged UI, then evaluates the whole operation once. All
 per-tab reads, writes, and final verification happen within that evaluation;
 there is no separate CLI process or tool call per tab. Native calls remain
-sequential where order matters. There is no daemon or extra browser extension.
+sequential where order matters. There is no daemon. Vivaldi needs no extension;
+Chromium browsers use direct CDP for basic commands, or the bundled extension
+and its open options page for groups and batches. See [the Chromium guide](docs/chromium.md).
 
 ## Add adapters for other browsers
 

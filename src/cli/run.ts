@@ -19,7 +19,14 @@ export async function run(
   try {
     const result = await connection.execute(input.command);
     const data = input.doctor
-      ? { connected: true, adapter: input.browser, windows: result }
+      ? {
+          connected: true,
+          adapter: input.browser,
+          windows: result,
+          ...(connection.capabilities
+            ? { capabilities: connection.capabilities }
+            : {}),
+        }
       : result;
     return { data, exitCode: statusCode(data) };
   } finally {
