@@ -52,10 +52,18 @@ export class CdpClient {
   static async connect(endpoint: string, connectTimeoutMs = 60_000) {
     let url = localEndpoint(endpoint);
     if (url.protocol === "http:") {
-      const response = await fetch(new URL("/json/version", url), {
-        redirect: "error",
-        signal: AbortSignal.timeout(3000),
-      });
+      let response: Response;
+      try {
+        response = await fetch(new URL("/json/version", url), {
+          redirect: "error",
+          signal: AbortSignal.timeout(3000),
+        });
+      } catch (error) {
+        throw new Error(
+          `Cannot reach CDP at ${url.origin}. Enable remote debugging in the intended browser and check the endpoint. --cdp selects an existing endpoint; it does not enable debugging.`,
+          { cause: error },
+        );
+      }
       if (!response.ok)
         throw new Error(`CDP discovery returned HTTP ${response.status}.`);
       const info = (await response.json()) as { webSocketDebuggerUrl?: string };

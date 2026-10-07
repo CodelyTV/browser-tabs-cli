@@ -1,5 +1,5 @@
 import { build } from "esbuild";
-import { chmod, rm } from "node:fs/promises";
+import { chmod, rm, cp } from "node:fs/promises";
 await rm("dist", { recursive: true, force: true });
 await build({
   entryPoints: ["src/cli/main.ts"],
@@ -21,3 +21,14 @@ await build({
   target: "chrome120",
 });
 await chmod("dist/main.js", 0o755);
+
+await cp("extension/chromium", "dist/chromium-extension", { recursive: true });
+await build({
+  entryPoints: ["src/adapters/chromium/runtime.ts"],
+  outfile: "dist/chromium-extension/runtime.js",
+  bundle: true,
+  platform: "browser",
+  format: "iife",
+  globalName: "BrowserTabsRuntime",
+  target: "chrome120",
+});

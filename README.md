@@ -24,13 +24,17 @@ Open, name, and organize tabs in the browser window you already use. Import a
 JSON file to create native groups, set their colors, and optionally verify the result with one command. The project and package are named
 `browser-tabs-cli`; the terminal command is `browser-tabs`.
 
-Vivaldi is the first adapter. The CLI connects to an already running browser;
+Vivaldi, Helium, Chrome, Chromium, Brave, Edge, and Opera have adapters.
+Vivaldi supports custom tab names. The Chromium adapter lists, opens, and closes
+tabs directly through CDP, with an optional bundled extension for native groups
+and batches. See [Helium and Chromium setup](docs/chromium.md).
+The CLI connects to an already running browser;
 it never launches a browser or replaces your profile. It preserves existing tabs
 when applying a batch.
 
 ## Getting started
 
-1. Install **Node.js 24.x**, Vivaldi, and [pnpm](https://pnpm.io/installation).
+1. Install **Node.js 24.x**, a supported browser, and [pnpm](https://pnpm.io/installation).
 
 2. Choose one installation method:
 
@@ -61,7 +65,9 @@ when applying a batch.
    If pnpm reports a missing global binary directory, run `pnpm setup`, restart
    your terminal, and retry the global installation.
 
-3. Connect the browser once. **CDP** means **Chrome DevTools Protocol**: a debugging
+3. Connect the browser once. For Helium and other Chromium browsers, follow
+   [the Chromium setup guide](docs/chromium.md). The steps below apply to Vivaldi.
+   **CDP** means **Chrome DevTools Protocol**: a debugging
    protocol that lets local tools communicate with Chromium-based browsers.
    This CLI uses it to reach Vivaldi's own browser interface and its native tab APIs.
    A website's JavaScript context cannot manage Vivaldi stacks.

@@ -89,6 +89,13 @@ export class BatchService {
     );
   }
   private checkLimits(plan: Plan) {
+    if (
+      this.browser.limits.tabNames === false &&
+      plan.tabs.some((tab) => tab.name !== undefined)
+    )
+      throw new Error(
+        "This browser does not support native custom tab names. Remove name fields from the plan.",
+      );
     for (const group of plan.groups)
       if (
         plan.tabs.filter((tab) => tab.groupKey === group.key).length <
